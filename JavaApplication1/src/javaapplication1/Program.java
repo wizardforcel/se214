@@ -6,14 +6,18 @@
 
 package javaapplication1;
 
+import java.util.*;
 import javax.swing.*;
+import java.sql.*;
 
 /**
  *
  * @author Wizard
  */
-public class JavaApplication1 {
-
+public class Program 
+{
+    public static final String FILE_PATH = "C:/data.db";
+    
     /**
      * @param args the command line arguments
      */
@@ -23,6 +27,14 @@ public class JavaApplication1 {
         {
           String style = UIManager.getSystemLookAndFeelClassName();
           UIManager.setLookAndFeel(style);
+            
+          //String path = System.getProperty("user.dir");
+          Class.forName("org.sqlite.JDBC");
+          Connection conn 
+            = DriverManager.getConnection("jdbc:sqlite:" + FILE_PATH);
+          //String sql = "";
+          conn.close();
+
           MainForm mf = new MainForm();
           mf.setVisible(true);
         }
