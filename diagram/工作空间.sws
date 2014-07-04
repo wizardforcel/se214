@@ -4,7 +4,9 @@
 
 <Workspace>
 	<Local Expanded="Yes">
-		<Model Expanded="Yes" ID="{5602CEA4-D751-4F6A-88EF-CC2B25DEBB47}" Name="UML Class Diagram_1" Selected="Yes" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="UML Class Diagram_1.oom"/>
+		<Model Expanded="Yes" ID="{5602CEA4-D751-4F6A-88EF-CC2B25DEBB47}" Loaded="No" Name="UML Class Diagram_1" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="UML Class Diagram_1.oom"/>
+		<Model Expanded="Yes" ID="{277F3013-2B83-44BA-89F1-8A27FE3B6922}" Name="Conceptual Data_1" Type="{1E597170-9350-11D1-AB3C-0020AF71E433}" URL="Conceptual Data_1.cdm"/>
+		<Model Expanded="Yes" ID="{AE269C31-E98A-4AEC-98BB-AE2E4DCC6790}" Name="Use Cases Definition_1" Selected="Yes" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="Use Cases Definition_1.oom"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
 </Workspace>
