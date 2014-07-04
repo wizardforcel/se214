@@ -139,12 +139,13 @@ public class MainForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(SettingButton)
-                    .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(SettingButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CalendarScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -162,15 +163,22 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_MonthSpinnerStateChanged
 
     private void CalendarTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CalendarTableMouseClicked
-        int year = (Integer)this.YearSpinner.getValue();
-        int month = (Integer)this.MonthSpinner.getValue();
-        int irow = CalendarTable.getSelectedRow();
-        int icol = CalendarTable.getSelectedColumn();
-        Integer day = (Integer)CalendarTable.getValueAt(irow, icol);
-        if(day != null)
+        try
         {
-          RoutineForm.SetYearAndMonth(year, month, day);
-          RoutineForm.setVisible(true);
+            int year = (Integer)this.YearSpinner.getValue();
+            int month = (Integer)this.MonthSpinner.getValue();
+            int irow = CalendarTable.getSelectedRow();
+            int icol = CalendarTable.getSelectedColumn();
+            Integer day = (Integer)CalendarTable.getValueAt(irow, icol);
+            if(day != null)
+            {
+              RoutineForm.SetDate(year, month, day);
+              RoutineForm.setVisible(true);
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_CalendarTableMouseClicked
 

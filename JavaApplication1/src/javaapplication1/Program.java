@@ -27,14 +27,9 @@ public class Program
         {
           String style = UIManager.getSystemLookAndFeelClassName();
           UIManager.setLookAndFeel(style);
-            
-          //String path = System.getProperty("user.dir");
-          Class.forName("org.sqlite.JDBC");
-          Connection conn 
-            = DriverManager.getConnection("jdbc:sqlite:" + FILE_PATH);
-          //String sql = "";
-          conn.close();
 
+          CreateDB();
+          
           MainForm mf = new MainForm();
           mf.setVisible(true);
         }
@@ -42,6 +37,27 @@ public class Program
         {
           JOptionPane.showMessageDialog(null, ex.getMessage());
         }
+    }
+    
+    private static void CreateDB() 
+            throws SQLException, ClassNotFoundException
+    {
+        //String path = System.getProperty("user.dir");
+        Class.forName("org.sqlite.JDBC");
+        Connection conn 
+           = DriverManager.getConnection("jdbc:sqlite:" + FILE_PATH);
+        String sql = "CREATE TABLE IF NOT EXISTS note (" + 
+                     "id integer AUTO_INCREMENT PRIMARY KEY," + 
+                     "date integer," + 
+                     "starttime integer," + 
+                     "endtime integer," + 
+                     "title varchar(255)," + 
+                     "comment varchar(255)," + 
+                     "alerttype integer," + 
+                     "alerttime integer )";
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+        conn.close();
     }
     
 }

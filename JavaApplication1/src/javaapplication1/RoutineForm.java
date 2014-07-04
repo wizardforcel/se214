@@ -6,6 +6,8 @@
 
 package javaapplication1;
 
+import javax.swing.table.*;
+
 /**
  *
  * @author Wizard
@@ -20,16 +22,21 @@ public class RoutineForm extends javax.swing.JDialog
     {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.setModal(true);
+        this.setModal(true);  
     }
 
-    public void SetYearAndMonth(int year, int month, int day)
+    public void SetDate(int year, int month, int day)
+           throws java.sql.SQLException, ClassNotFoundException
     {
-        this.year = year;
-        this.month = month;
-        this.day = day;
+        if(Year == year && Month == month && Day == day)
+            return;
+        Year = year;
+        Month = month;
+        Day = day;
         this.setTitle("日程安排 " + String.valueOf(year) + "年" +
                       String.valueOf(month) + "月" + String.valueOf(day) + "日");
+        Routine.Load(year, month, day);
+        Routine.Show(RoutineTable);
     }
     
     
@@ -43,17 +50,25 @@ public class RoutineForm extends javax.swing.JDialog
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        RoutineTable = new javax.swing.JTable();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        RoutineTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "事件名称", "起始时间", "截止时间", "提醒方式", "提醒时间", "备注"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(RoutineTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,11 +92,13 @@ public class RoutineForm extends javax.swing.JDialog
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable RoutineTable;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    private int year;
-    private int month;
-    private int day;
+    private int Year;
+    private int Month;
+    private int Day;
+    private RoutineManager Routine
+            = new RoutineManager();
 }
