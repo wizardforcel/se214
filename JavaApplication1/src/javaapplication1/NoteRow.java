@@ -6,6 +6,8 @@
 
 package javaapplication1;
 
+import java.util.Objects;
+
 /**
  *
  * @author Wizard
@@ -37,4 +39,26 @@ public class NoteRow
     public void SetAlertType(int alerttype) { AlertType = alerttype; }
     public int GetAlertTime() { return AlertTime; }
     public void SetAlertTime(int alerttime) { AlertTime = alerttime; }
+    
+    @Override
+    public boolean equals(Object o)
+    {
+        if(!(o instanceof NoteRow))
+            return false;
+        NoteRow that = (NoteRow)o;
+        return (this.GetDate() == that.GetDate() &&
+                this.GetStartTime() == that.GetStartTime() &&
+                this.GetEndTime() == that.GetEndTime() &&
+                this.GetTitle().equals(that.GetTitle()));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 41 * hash + this.Date;
+        hash = 41 * hash + this.StartTime;
+        hash = 41 * hash + this.EndTime;
+        hash = 41 * hash + Objects.hashCode(this.Title);
+        return hash;
+    }
 }

@@ -66,9 +66,9 @@ public class RoutineManager
             int itype = row.GetAlertType();
             String strtype;
             if(itype == 1)
-                strtype = "当天";
-            else if(itype == 2)
                 strtype = "提前一天";
+            else if(itype == 2)
+                strtype = "当天";
             else
                 strtype = "无";
             arr[3] = strtype;
@@ -90,35 +90,33 @@ public class RoutineManager
         return String.format("%02d:%02d", hr, min);
     }
     
-    public boolean Save(NoteRow note)
-           throws ClassNotFoundException, SQLException
+    public void Save(NoteRow note)
+           throws ClassNotFoundException, SQLException, Exception
     {
         if(Data.indexOf(note) == -1)
-            return false;
+            throw new Exception("该计划不存在");
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
-        String sql = "UPDATE note SET date=?, starttime=?, " +
+        String sql = "UPDATE note SET starttime=?, " +
                      "endtime=?, title=?, comment=?, alerttype=?, " + 
                      "alerttime=? WHERE id=?";
         PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, note.GetDate());
-        stmt.setInt(2, note.GetStartTime());
-        stmt.setInt(3, note.GetEndTime());
-        stmt.setString(4, note.GetTitle());
-        stmt.setString(5, note.GetComment());
-        stmt.setInt(6, note.GetAlertType());
-        stmt.setInt(7, note.GetAlertTime());
-        stmt.setInt(8, note.GetID());
+        stmt.setInt(1, note.GetStartTime());
+        stmt.setInt(2, note.GetEndTime());
+        stmt.setString(3, note.GetTitle());
+        stmt.setString(4, note.GetComment());
+        stmt.setInt(5, note.GetAlertType());
+        stmt.setInt(6, note.GetAlertTime());
+        stmt.setInt(7, note.GetID());
         stmt.executeUpdate();
-        return true;
     }
   
-    public boolean Remove(NoteRow note)
-           throws ClassNotFoundException, SQLException
+    public void Remove(NoteRow note)
+           throws ClassNotFoundException, SQLException, Exception
     {
         if(Data.indexOf(note) == -1)
-            return false;
+            throw new Exception("该计划不存在");
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
@@ -127,14 +125,13 @@ public class RoutineManager
         stmt.setInt(1, note.GetID());
         stmt.executeUpdate();
         Data.remove(note);
-        return true;
     }
     
-    public boolean Add(NoteRow note)
-           throws ClassNotFoundException, SQLException
+    public void Add(NoteRow note)
+           throws ClassNotFoundException, SQLException, Exception
     {
         if(Data.indexOf(note) != -1)
-            return false;
+            throw new Exception("该计划已存在");
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
@@ -153,6 +150,5 @@ public class RoutineManager
         rs.next();
         note.SetID(rs.getInt(1));
         Data.add(note);
-        return true;
     }
 }

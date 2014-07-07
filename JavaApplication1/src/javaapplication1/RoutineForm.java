@@ -7,6 +7,7 @@
 package javaapplication1;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.*;
 
 /**
@@ -135,15 +136,13 @@ public class RoutineForm extends javax.swing.JDialog
             SettingForm.setVisible(true);
             if(SettingForm.IsSaved())
             {
-                if (Routine.Save(note))
-                    Routine.Show(RoutineTable);
-                else
-                    JOptionPane.showMessageDialog(null, "计划不存在，更新失败。");
+                Routine.Save(note);
+                Routine.Show(RoutineTable);
             }
         }
         catch(Exception ex)
         {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            JOptionPane.showMessageDialog(null, "修改失败！" + ex.getMessage());
         }
     }//GEN-LAST:event_RoutineTableMouseClicked
 
@@ -151,15 +150,18 @@ public class RoutineForm extends javax.swing.JDialog
         try
         {
             int row = RoutineTable.getSelectedRow();
+            if(row == -1) return;
+            if(JOptionPane.showConfirmDialog(null, "真的要删除吗？",
+                UIManager.getString("OptionPane.titleText") , 
+                JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
+                return;
             NoteRow note = Routine.Get(row);
-            if (Routine.Remove(note))
-                Routine.Show(RoutineTable);
-            else
-                JOptionPane.showMessageDialog(null, "计划不存在，删除失败。");
+            Routine.Remove(note);
+            Routine.Show(RoutineTable);
         }
         catch(Exception ex)
         {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            JOptionPane.showMessageDialog(null, "删除失败！" + ex.getMessage());
         }
     }//GEN-LAST:event_DelButtonActionPerformed
 
@@ -167,19 +169,18 @@ public class RoutineForm extends javax.swing.JDialog
         try
         {
             NoteRow note = new NoteRow();
+            note.SetDate(Year * 10000 + Month * 100 + Day);
             SettingForm.SetNote(note);
             SettingForm.setVisible(true);
             if(SettingForm.IsSaved())
             {
-                if (Routine.Add(note))
-                    Routine.Show(RoutineTable);
-                else
-                    JOptionPane.showMessageDialog(null, "计划已存在，添加失败。");
+                Routine.Add(note);
+                Routine.Show(RoutineTable);
             }
         }
         catch(Exception ex)
         {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            JOptionPane.showMessageDialog(null, "添加失败！" + ex.getMessage());
         }
     }//GEN-LAST:event_AddButtonActionPerformed
 

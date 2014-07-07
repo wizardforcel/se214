@@ -8,6 +8,7 @@ package javaapplication1;
 
 import java.util.Calendar;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -18,7 +19,9 @@ public class MainForm extends javax.swing.JFrame {
     /**
      * Creates new form MainForm
      */
-    public MainForm() {
+    public MainForm() 
+           throws AWTException 
+    {
         initComponents();
         this.setLocationRelativeTo(null);
         RoutineForm = new RoutineForm();
@@ -29,6 +32,12 @@ public class MainForm extends javax.swing.JFrame {
         YearSpinner.setModel(new SpinnerNumberModel(year, 1970, 2999, 1));
         MonthSpinner.setModel(new SpinnerNumberModel(month, 1, 12, 1));
         ShowCalendar();
+        
+        if (SystemTray.isSupported())
+        {
+            TrayIcon = new TrayIcon(this.getIconImage());
+            SystemTray.getSystemTray().add(TrayIcon);
+        }
     }
 
     private void ShowCalendar()
@@ -185,6 +194,7 @@ public class MainForm extends javax.swing.JFrame {
 
     private void SettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingButtonActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_SettingButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -198,4 +208,5 @@ public class MainForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private RoutineForm RoutineForm;
+    private TrayIcon TrayIcon;
 }

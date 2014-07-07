@@ -47,14 +47,14 @@ public class Program
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + FILE_PATH);
         String sql = "CREATE TABLE IF NOT EXISTS note (" + 
-                     "id integer AUTO_INCREMENT PRIMARY KEY," + 
-                     "date integer," + 
-                     "starttime integer," + 
-                     "endtime integer," + 
-                     "title varchar(255)," + 
-                     "comment varchar(255)," + 
-                     "alerttype integer," + 
-                     "alerttime integer )";
+                     "id INTEGER PRIMARY KEY," + 
+                     "date INT," + 
+                     "starttime INT," + 
+                     "endtime INT," + 
+                     "title TEXT," + 
+                     "comment TEXT," + 
+                     "alerttype INT," + 
+                     "alerttime INT )";
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(sql);
         conn.close();
