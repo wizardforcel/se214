@@ -165,6 +165,7 @@ public class MainForm extends javax.swing.JFrame {
     private void CalendarTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CalendarTableMouseClicked
         try
         {
+            if(evt.getClickCount() == 1) return;
             int year = (Integer)this.YearSpinner.getValue();
             int month = (Integer)this.MonthSpinner.getValue();
             int irow = CalendarTable.getSelectedRow();

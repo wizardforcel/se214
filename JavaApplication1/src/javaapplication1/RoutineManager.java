@@ -85,10 +85,74 @@ public class RoutineManager
     
     private static String TimeConvert(int time)
     {
-        int sec = time % 100;
-        time /= 100;
         int min = time % 100;
         int hr = time / 100;
-        return String.format("%02d:%02d:%02d", hr, min, sec);
+        return String.format("%02d:%02d", hr, min);
+    }
+    
+    public boolean Save(NoteRow note)
+           throws ClassNotFoundException, SQLException
+    {
+        if(Data.indexOf(note) == -1)
+            return false;
+        Class.forName("org.sqlite.JDBC");
+        Connection conn 
+           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
+        String sql = "UPDATE note SET date=?, starttime=?, " +
+                     "endtime=?, title=?, comment=?, alerttype=?, " + 
+                     "alerttime=? WHERE id=?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, note.GetDate());
+        stmt.setInt(2, note.GetStartTime());
+        stmt.setInt(3, note.GetEndTime());
+        stmt.setString(4, note.GetTitle());
+        stmt.setString(5, note.GetComment());
+        stmt.setInt(6, note.GetAlertType());
+        stmt.setInt(7, note.GetAlertTime());
+        stmt.setInt(8, note.GetID());
+        stmt.executeUpdate();
+        return true;
+    }
+  
+    public boolean Remove(NoteRow note)
+           throws ClassNotFoundException, SQLException
+    {
+        if(Data.indexOf(note) == -1)
+            return false;
+        Class.forName("org.sqlite.JDBC");
+        Connection conn 
+           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
+        String sql = "DELETE FROM note WHERE id=?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, note.GetID());
+        stmt.executeUpdate();
+        Data.remove(note);
+        return true;
+    }
+    
+    public boolean Add(NoteRow note)
+           throws ClassNotFoundException, SQLException
+    {
+        if(Data.indexOf(note) != -1)
+            return false;
+        Class.forName("org.sqlite.JDBC");
+        Connection conn 
+           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
+        String sql = "INSERT INTO note (date, starttime, endtime, title, " +
+                     "comment, alerttype, alerttime) VALUES (?,?,?,?,?,?,?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, note.GetDate());
+        stmt.setInt(2, note.GetStartTime());
+        stmt.setInt(3, note.GetEndTime());
+        stmt.setString(4, note.GetTitle());
+        stmt.setString(5, note.GetComment());
+        stmt.setInt(6, note.GetAlertType());
+        stmt.setInt(7, note.GetAlertTime());
+        stmt.executeUpdate();
+        ResultSet rs = stmt.getGeneratedKeys();
+        rs.next();
+        note.SetID(rs.getInt(1));
+        Data.add(note);
+        return true;
     }
 }

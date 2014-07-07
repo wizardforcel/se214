@@ -6,6 +6,7 @@
 
 package javaapplication1;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.*;
 
 /**
@@ -22,7 +23,8 @@ public class RoutineForm extends javax.swing.JDialog
     {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.setModal(true);  
+        this.setModal(true);
+        SettingForm = new SettingForm();
     }
 
     public void SetDate(int year, int month, int day)
@@ -51,6 +53,10 @@ public class RoutineForm extends javax.swing.JDialog
 
         jScrollPane1 = new javax.swing.JScrollPane();
         RoutineTable = new javax.swing.JTable();
+        DelButton = new javax.swing.JButton();
+        AddButton = new javax.swing.JButton();
+
+        setResizable(false);
 
         RoutineTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -68,7 +74,26 @@ public class RoutineForm extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
+        RoutineTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RoutineTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(RoutineTable);
+
+        DelButton.setText("删除");
+        DelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DelButtonActionPerformed(evt);
+            }
+        });
+
+        AddButton.setText("添加");
+        AddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -76,22 +101,92 @@ public class RoutineForm extends javax.swing.JDialog
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DelButton)
+                    .addComponent(AddButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void RoutineTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RoutineTableMouseClicked
+        try
+        {
+            if(evt.getClickCount() == 1) return;
+            int row = RoutineTable.getSelectedRow();
+            NoteRow note = Routine.Get(row);
+            SettingForm.SetNote(note);
+            SettingForm.setVisible(true);
+            if(SettingForm.IsSaved())
+            {
+                if (Routine.Save(note))
+                    Routine.Show(RoutineTable);
+                else
+                    JOptionPane.showMessageDialog(null, "计划不存在，更新失败。");
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_RoutineTableMouseClicked
+
+    private void DelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DelButtonActionPerformed
+        try
+        {
+            int row = RoutineTable.getSelectedRow();
+            NoteRow note = Routine.Get(row);
+            if (Routine.Remove(note))
+                Routine.Show(RoutineTable);
+            else
+                JOptionPane.showMessageDialog(null, "计划不存在，删除失败。");
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_DelButtonActionPerformed
+
+    private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
+        try
+        {
+            NoteRow note = new NoteRow();
+            SettingForm.SetNote(note);
+            SettingForm.setVisible(true);
+            if(SettingForm.IsSaved())
+            {
+                if (Routine.Add(note))
+                    Routine.Show(RoutineTable);
+                else
+                    JOptionPane.showMessageDialog(null, "计划已存在，添加失败。");
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_AddButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddButton;
+    private javax.swing.JButton DelButton;
     private javax.swing.JTable RoutineTable;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
@@ -101,4 +196,5 @@ public class RoutineForm extends javax.swing.JDialog
     private int Day;
     private RoutineManager Routine
             = new RoutineManager();
+    private SettingForm SettingForm;
 }
