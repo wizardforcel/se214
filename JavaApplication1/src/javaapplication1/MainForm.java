@@ -9,6 +9,7 @@ package javaapplication1;
 import java.util.Calendar;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 /**
  *
@@ -35,8 +36,25 @@ public class MainForm extends javax.swing.JFrame {
         
         if (SystemTray.isSupported())
         {
-            TrayIcon = new TrayIcon(this.getIconImage());
-            SystemTray.getSystemTray().add(TrayIcon);
+           TrayIcon = new TrayIcon(
+             new ImageIcon(MainForm.class.getResource("/rsrc/icon.jpg")).getImage());
+           TrayIcon.setToolTip("日程管理");
+           TrayIcon.setImageAutoSize(true);
+           SystemTray.getSystemTray().add(TrayIcon);
+           TrayIcon.addMouseListener(new MouseListener() 
+           {       
+               @Override
+               public void mouseClicked(MouseEvent e) 
+               { TrayIcon_MouseClicked(e); }
+               @Override
+               public void mousePressed(MouseEvent e) { }
+               @Override
+               public void mouseReleased(MouseEvent e) { }
+               @Override
+               public void mouseEntered(MouseEvent e) { }
+               @Override
+               public void mouseExited(MouseEvent e) { }
+           });
         }
     }
 
@@ -47,6 +65,12 @@ public class MainForm extends javax.swing.JFrame {
         CalendarManager cm = new CalendarManager();
         cm.SetDate(year, month);
         cm.Show(CalendarTable);
+    }
+    
+    private void TrayIcon_MouseClicked(MouseEvent e)
+    {
+        if(e.getClickCount() != 2) return;
+        setVisible(!isVisible());
     }
     
     /**
@@ -68,6 +92,7 @@ public class MainForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("日程管理");
+        setIconImage(new ImageIcon(MainForm.class.getResource("/rsrc/icon.jpg")).getImage());
         setResizable(false);
 
         CalendarTable.setModel(new javax.swing.table.DefaultTableModel(
