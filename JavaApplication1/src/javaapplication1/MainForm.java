@@ -28,13 +28,6 @@ public class MainForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         RoutineForm = new RoutineForm();
         
-        Calendar dt = Calendar.getInstance();
-        int year = dt.get(Calendar.YEAR);
-        int month = dt.get(Calendar.MONTH) + 1;
-        YearSpinner.setModel(new SpinnerNumberModel(year, 1970, 2999, 1));
-        MonthSpinner.setModel(new SpinnerNumberModel(month, 1, 12, 1));
-        ShowCalendar();
-        
         InitTrayIcon();
     }
 
@@ -43,10 +36,10 @@ public class MainForm extends javax.swing.JFrame {
     {
         if(!SystemTray.isSupported()) return;
         TrayIcon = new TrayIcon(
-             new ImageIcon(MainForm.class.getResource("/rsrc/icon.jpg")).getImage());
+                   new ImageIcon(MainForm.class.getResource("/rsrc/icon.jpg"))
+                                         .getImage());
         TrayIcon.setToolTip("日程管理");
         TrayIcon.setImageAutoSize(true);
-        SystemTray.getSystemTray().add(TrayIcon);
         TrayIcon.addMouseListener(new MouseListener() 
         {       
             @Override
@@ -61,13 +54,7 @@ public class MainForm extends javax.swing.JFrame {
             @Override
             public void mouseExited(MouseEvent e) { }
         });
-
-        Thread tr = new Thread(new Runnable()
-        {
-            @Override
-            public void run() { DoThread(); }
-        });
-        tr.start();
+        SystemTray.getSystemTray().add(TrayIcon);
     }
     
     private void ShowCalendar()
@@ -159,6 +146,11 @@ public class MainForm extends javax.swing.JFrame {
         setTitle("日程管理");
         setIconImage(new ImageIcon(MainForm.class.getResource("/rsrc/icon.jpg")).getImage());
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
                 formWindowStateChanged(evt);
@@ -243,10 +235,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)))
+                        .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2))
+                    .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(SettingButton)))
@@ -288,8 +279,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_CalendarTableMouseClicked
 
     private void SettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingButtonActionPerformed
-        // TODO add your handling code here:
-        
+          
     }//GEN-LAST:event_SettingButtonActionPerformed
 
     private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
@@ -302,6 +292,25 @@ public class MainForm extends javax.swing.JFrame {
                                     java.awt.TrayIcon.MessageType.INFO);
         }
     }//GEN-LAST:event_formWindowStateChanged
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        Calendar dt = Calendar.getInstance();
+        int year = dt.get(Calendar.YEAR);
+        int month = dt.get(Calendar.MONTH) + 1;
+        YearSpinner.setModel(new SpinnerNumberModel(year, 1970, 2999, 1));
+        MonthSpinner.setModel(new SpinnerNumberModel(month, 1, 12, 1));
+        ShowCalendar();
+        
+        if(SystemTray.isSupported())
+        {
+            Thread tr = new Thread(new Runnable()
+            {
+                @Override
+                public void run() { DoThread(); }
+            });
+            tr.start();
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane CalendarScrollPane;
