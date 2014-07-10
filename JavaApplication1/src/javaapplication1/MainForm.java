@@ -22,19 +22,22 @@ public class MainForm extends javax.swing.JFrame {
      * Creates new form MainForm
      */
     public MainForm()
-           throws AWTException
+           throws AWTException, Exception
     {
         initComponents();
         this.setLocationRelativeTo(null);
+        CalendarTable.getTableHeader().setReorderingAllowed(false);
+        CalendarTable.getTableHeader().setResizingAllowed(false);
         RoutineForm = new RoutineForm();
         
         InitTrayIcon();
     }
 
     private void InitTrayIcon()
-            throws AWTException
+            throws AWTException, Exception
     {
-        if(!SystemTray.isSupported()) return;
+        if(!SystemTray.isSupported()) 
+            throw new Exception("对不起，该系统不支持托盘。");
         TrayIcon = new TrayIcon(
                    new ImageIcon(MainForm.class.getResource("/rsrc/icon.jpg"))
                                          .getImage());
@@ -283,8 +286,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_SettingButtonActionPerformed
 
     private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
-        if(evt.getNewState() == JFrame.ICONIFIED &&
-           SystemTray.isSupported())
+        if(evt.getNewState() == JFrame.ICONIFIED)
         {
             this.setExtendedState(JFrame.NORMAL);
             this.setVisible(false);
@@ -301,15 +303,12 @@ public class MainForm extends javax.swing.JFrame {
         MonthSpinner.setModel(new SpinnerNumberModel(month, 1, 12, 1));
         ShowCalendar();
         
-        if(SystemTray.isSupported())
+        Thread tr = new Thread(new Runnable()
         {
-            Thread tr = new Thread(new Runnable()
-            {
-                @Override
-                public void run() { DoThread(); }
-            });
-            tr.start();
-        }
+            @Override
+            public void run() { DoThread(); }
+        });
+        tr.start();
     }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

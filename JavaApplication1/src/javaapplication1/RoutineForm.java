@@ -25,6 +25,8 @@ public class RoutineForm extends javax.swing.JDialog
         initComponents();
         this.setLocationRelativeTo(null);
         this.setModal(true);
+        RoutineTable.getTableHeader().setReorderingAllowed(false);
+        RoutineTable.getTableHeader().setResizingAllowed(false);
         SettingForm = new SettingForm();
     }
 

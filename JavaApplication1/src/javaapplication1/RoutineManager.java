@@ -94,7 +94,7 @@ public class RoutineManager
            throws ClassNotFoundException, SQLException, Exception
     {
         if(Data.indexOf(note) == -1)
-            throw new Exception("该计划不存在");
+            throw new Exception("该计划不存在。");
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
@@ -116,7 +116,7 @@ public class RoutineManager
            throws ClassNotFoundException, SQLException, Exception
     {
         if(Data.indexOf(note) == -1)
-            throw new Exception("该计划不存在");
+            throw new Exception("该计划不存在。");
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
@@ -131,7 +131,7 @@ public class RoutineManager
            throws ClassNotFoundException, SQLException, Exception
     {
         if(Data.indexOf(note) != -1)
-            throw new Exception("该计划已存在");
+            throw new Exception("该计划已存在。");
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
