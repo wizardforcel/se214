@@ -144,6 +144,8 @@ public class MainForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         MonthSpinner = new javax.swing.JSpinner();
         SettingButton = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        WeatherLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("日程管理");
@@ -212,6 +214,12 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        WeatherLabel.setText("          ");
+        jToolBar1.add(WeatherLabel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -231,6 +239,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(SettingButton))
                     .addComponent(CalendarScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +255,8 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(SettingButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CalendarScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -316,9 +326,11 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JTable CalendarTable;
     private javax.swing.JSpinner MonthSpinner;
     private javax.swing.JButton SettingButton;
+    private javax.swing.JLabel WeatherLabel;
     private javax.swing.JSpinner YearSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
     private RoutineForm RoutineForm;

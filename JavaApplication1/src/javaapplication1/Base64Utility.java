@@ -14,7 +14,7 @@ import sun.misc.*;
  *
  * @author Wizard
  */
-public class Utility 
+public class Base64Utility 
 {
     public static String Base64Enco(String text) 
            throws UnsupportedEncodingException

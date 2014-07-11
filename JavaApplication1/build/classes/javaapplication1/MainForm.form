@@ -50,6 +50,7 @@
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
+          <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -70,6 +71,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="CalendarScrollPane" min="-2" pref="124" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="jToolBar1" min="-2" pref="20" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -131,5 +133,20 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SettingButtonActionPerformed"/>
       </Events>
     </Component>
+    <Container class="javax.swing.JToolBar" name="jToolBar1">
+      <Properties>
+        <Property name="floatable" type="boolean" value="false"/>
+        <Property name="rollover" type="boolean" value="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="WeatherLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="          "/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>
