@@ -82,7 +82,11 @@ public class WizardHTTP
             throws IOException
     {
         URL url = new URL(tar);
-        URLConnection  conn = url.openConnection(Proxy);
+        URLConnection conn;
+        if(Proxy == null)
+            conn = url.openConnection();
+        else
+            conn = url.openConnection(Proxy);
         conn.setConnectTimeout(Timeout);
         conn.setReadTimeout(Timeout);
         for(String k : Header.keySet())

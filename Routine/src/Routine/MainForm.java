@@ -6,12 +6,16 @@
 
 package Routine;
 
-import Routine.Utility.CalendarManager;
-import java.util.*;
-import javax.swing.*;
+import Routine.BaiduAPI.BaiduAPI;
+import Routine.BaiduAPI.LocResult;
+import Routine.BaiduAPI.WeatherResult;
+import Routine.Utility.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.*;
+import javax.swing.*;
+import net.sf.json.*;
 
 /**
  *
@@ -127,6 +131,31 @@ public class MainForm extends javax.swing.JFrame {
         }
         } catch(Exception ex)
         { JOptionPane.showMessageDialog(null, ex.getMessage()); }
+    }
+    
+    private void GetWeather()
+    {
+        try
+        {
+            WizardHTTP wc = new WizardHTTP();
+            wc.SetDefHeader(false);
+            LocResult lr = BaiduAPI.GetLoc(wc, "");
+            if(lr.errno != 0)
+                throw new Exception(lr.errmsg);
+            String city = lr.city;
+            WeatherResult wr = BaiduAPI.GetWeater(wc, city);
+            if(wr.errno != 0)
+                throw new Exception(wr.errmsg);
+            String weather = wr.weather;
+            String wind = wr.wind;
+            String temperature = wr.temprature;
+            this.WeatherLabel.setText(city + " " + temperature + " " + 
+                                      weather + " " + wind);
+        }
+        catch(Exception ex)
+        {
+            this.WeatherLabel.setText("天气获取失败！" + ex.getMessage());
+        }
     }
     
     /**
@@ -314,6 +343,13 @@ public class MainForm extends javax.swing.JFrame {
         {
             @Override
             public void run() { DoThread(); }
+        });
+        tr.start();
+        
+        tr = new Thread(new Runnable()
+        {
+            @Override
+            public void run() { GetWeather(); }
         });
         tr.start();
     }//GEN-LAST:event_formWindowOpened
