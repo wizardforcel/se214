@@ -69,7 +69,7 @@ public class SettingForm extends javax.swing.JDialog
     @Override
     public void setVisible(boolean b)
     {
-        this.Saved = false;
+        if(b) this.Saved = false; //Show
         super.setVisible(b);
     }
     

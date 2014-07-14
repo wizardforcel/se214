@@ -44,7 +44,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="MonthSpinner" min="-2" pref="65" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="SettingButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="ExportButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="CalendarScrollPane" pref="349" max="32767" attributes="0"/>
                   <Component id="WeatherLabel" max="32767" attributes="0"/>
@@ -65,7 +65,7 @@
                   <Component id="YearSpinner" min="-2" pref="22" max="-2" attributes="0"/>
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="SettingButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="ExportButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -126,12 +126,12 @@
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="MonthSpinnerStateChanged"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="SettingButton">
+    <Component class="javax.swing.JButton" name="ExportButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x5bfc;&#x5165;/&#x5bfc;&#x51fa;"/>
+        <Property name="text" type="java.lang.String" value="&#x5bfc;&#x51fa;"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SettingButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ExportButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="WeatherLabel">

@@ -173,7 +173,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         MonthSpinner = new javax.swing.JSpinner();
-        SettingButton = new javax.swing.JButton();
+        ExportButton = new javax.swing.JButton();
         WeatherLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -236,10 +236,10 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        SettingButton.setText("导入/导出");
-        SettingButton.addActionListener(new java.awt.event.ActionListener() {
+        ExportButton.setText("导出");
+        ExportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SettingButtonActionPerformed(evt);
+                ExportButtonActionPerformed(evt);
             }
         });
 
@@ -261,7 +261,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(SettingButton))
+                        .addComponent(ExportButton))
                     .addComponent(CalendarScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
                     .addComponent(WeatherLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -277,7 +277,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(SettingButton)))
+                        .addComponent(ExportButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CalendarScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -317,10 +317,6 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CalendarTableMouseClicked
 
-    private void SettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingButtonActionPerformed
-          
-    }//GEN-LAST:event_SettingButtonActionPerformed
-
     private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
         if(evt.getNewState() == JFrame.ICONIFIED)
         {
@@ -354,11 +350,27 @@ public class MainForm extends javax.swing.JFrame {
         tr.start();
     }//GEN-LAST:event_formWindowOpened
 
+    private void ExportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportButtonActionPerformed
+        try
+        {
+            JFileChooser dlg = new JFileChooser();
+            if(dlg.showSaveDialog(null) != JFileChooser.APPROVE_OPTION)
+                return;
+            String filename = dlg.getSelectedFile().getPath();
+            RoutineManager.Export(filename);
+            JOptionPane.showMessageDialog(null, "导出成功！");
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_ExportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane CalendarScrollPane;
     private javax.swing.JTable CalendarTable;
+    private javax.swing.JButton ExportButton;
     private javax.swing.JSpinner MonthSpinner;
-    private javax.swing.JButton SettingButton;
     private javax.swing.JLabel WeatherLabel;
     private javax.swing.JSpinner YearSpinner;
     private javax.swing.JLabel jLabel1;

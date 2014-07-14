@@ -7,6 +7,9 @@
 package Routine.Utility;
 
 import Routine.Program;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import javax.swing.*;
 import java.util.*;
@@ -151,5 +154,36 @@ public class RoutineManager
         rs.next();
         note.SetID(rs.getInt(1));
         Data.add(note);
+    }
+    
+    public static void Export(String filename) 
+           throws ClassNotFoundException, SQLException,
+                  FileNotFoundException, UnsupportedEncodingException, IOException
+    {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn 
+           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
+        //id date starttime endtime title comment alerttype alerttime
+        String sql = "SELECT * FROM note";
+        Statement stmt= conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        StreamWriter sw = new StreamWriter(filename, false);
+        while(rs.next())
+        {
+            int date = rs.getInt(2);
+            int starttime = rs.getInt(3);
+            int endtime = rs.getInt(4);
+            String title = Base64Utility.Base64Enco(rs.getString(5));
+            String comment = Base64Utility.Base64Enco(rs.getString(6));
+            comment = comment.equals("")? "-": comment;
+            int alerttype = rs.getInt(7);
+            int alerttime = rs.getInt(8);
+            String line = String.format("%d %d %d %s %s %d %d",
+                          date, starttime, endtime, title, comment,
+                          alerttype, alerttime);
+            sw.WriteLine(line);
+        }
+        sw.close();
+        conn.close();
     }
 }

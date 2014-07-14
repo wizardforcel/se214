@@ -95,25 +95,18 @@ public class WizardHTTP
         {
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            OutputStreamWriter out
-              = new OutputStreamWriter(conn.getOutputStream());
-            out.write(postdata);
-            out.close();
+            StreamWriter sw
+              = new StreamWriter(conn.getOutputStream());
+            sw.write(postdata);
+            sw.close();
         }
         conn.connect();
         RetHeader = conn.getHeaderFields();
-        BufferedReader in
-          = new BufferedReader(
-            new InputStreamReader(conn.getInputStream(), Charset));
-        StringBuffer sb = new StringBuffer();
-        while(true)
-        {
-            String line = in.readLine();
-            if(line == null) break;
-            sb.append(line).append("\n");
-        }
-        in.close();
-        return sb.toString();
+        StreamReader sr
+          = new StreamReader(conn.getInputStream(), Charset);
+        String retstr = sr.ReadToEnd();
+        sr.close();
+        return retstr;
     }
     
     public String HTTPGet(String tar)
