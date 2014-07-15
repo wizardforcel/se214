@@ -135,12 +135,12 @@ public class RoutineForm extends javax.swing.JDialog
         {
             if(evt.getClickCount() == 1) return;
             int row = RoutineTable.getSelectedRow();
-            NoteRow note = Routine.Get(row);
+            NoteRow note = Routine.Get(row).Clone();
             SettingForm.SetNote(note);
             SettingForm.setVisible(true);
             if(SettingForm.IsSaved())
             {
-                Routine.Save(note);
+                Routine.UpdateAt(row, note);
                 Routine.Show(RoutineTable);
             }
         }
@@ -159,8 +159,7 @@ public class RoutineForm extends javax.swing.JDialog
                 UIManager.getString("OptionPane.titleText") , 
                 JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
                 return;
-            NoteRow note = Routine.Get(row);
-            Routine.Remove(note);
+            Routine.RemoveAt(row);
             Routine.Show(RoutineTable);
         }
         catch(Exception ex)

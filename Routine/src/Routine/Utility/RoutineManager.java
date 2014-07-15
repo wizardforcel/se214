@@ -94,11 +94,12 @@ public class RoutineManager
         return String.format("%02d:%02d", hr, min);
     }
     
-    public void Save(NoteRow note)
+    public void UpdateAt(int index, NoteRow note)
            throws ClassNotFoundException, SQLException, Exception
     {
-        if(Data.indexOf(note) == -1)
-            throw new Exception("该计划不存在。");
+        NoteRow oldnote = Data.get(index);
+        if(!oldnote.equals(note) && Data.indexOf(note) != -1)
+            throw new Exception("该计划已存在。");
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
@@ -112,15 +113,15 @@ public class RoutineManager
         stmt.setString(4, note.GetComment());
         stmt.setInt(5, note.GetAlertType());
         stmt.setInt(6, note.GetAlertTime());
-        stmt.setInt(7, note.GetID());
+        stmt.setInt(7, oldnote.GetID());
         stmt.executeUpdate();
+        Data.set(index, note);
     }
   
-    public void Remove(NoteRow note)
+    public void RemoveAt(int index)
            throws ClassNotFoundException, SQLException, Exception
     {
-        if(Data.indexOf(note) == -1)
-            throw new Exception("该计划不存在。");
+        NoteRow note = Data.get(index);
         Class.forName("org.sqlite.JDBC");
         Connection conn 
            = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);

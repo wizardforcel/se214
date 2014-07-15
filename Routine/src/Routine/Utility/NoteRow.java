@@ -40,6 +40,20 @@ public class NoteRow
     public int GetAlertTime() { return AlertTime; }
     public void SetAlertTime(int alerttime) { AlertTime = alerttime; }
     
+    public NoteRow Clone()
+    {
+        NoteRow newnote = new NoteRow();
+        newnote.SetID(ID);
+        newnote.SetDate(Date);
+        newnote.SetStartTime(StartTime);
+        newnote.SetEndTime(EndTime);
+        newnote.SetTitle(Title);
+        newnote.SetComment(Comment);
+        newnote.SetAlertTime(AlertTime);
+        newnote.SetAlertType(AlertType);
+        return newnote;
+    }
+    
     @Override
     public boolean equals(Object o)
     {
