@@ -11,9 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
-import javax.swing.*;
 import java.util.*;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -26,6 +24,11 @@ public class RoutineManager
     private int Day;
     private ArrayList<NoteRow> Data
             = new ArrayList<NoteRow>();
+    
+    public int Size()
+    {
+        return Data.size();
+    }
     
     public void Load(int year, int month, int day)
            throws SQLException, ClassNotFoundException
@@ -57,37 +60,12 @@ public class RoutineManager
         conn.close();
     }
     
-    public void Show(JTable jtb)
-    {
-        DefaultTableModel model = (DefaultTableModel)jtb.getModel();
-        model.setRowCount(0);
-        for(NoteRow row : Data)
-        {
-            Object[] arr = new Object[6];
-            arr[0] = row.GetTitle();
-            arr[1] = TimeConvert(row.GetStartTime());
-            arr[2] = TimeConvert(row.GetEndTime());
-            int itype = row.GetAlertType();
-            String strtype;
-            if(itype == 1)
-                strtype = "提前一天";
-            else if(itype == 2)
-                strtype = "当天";
-            else
-                strtype = "无";
-            arr[3] = strtype;
-            arr[4] =TimeConvert(row.GetAlertTime());
-            arr[5] = row.GetComment();
-            model.addRow(arr);
-        }
-    }
-    
     public NoteRow Get(int index)
     {
         return Data.get(index);
     }
     
-    private static String TimeConvert(int time)
+    public static String TimeConvert(int time)
     {
         int min = time % 100;
         int hr = time / 100;

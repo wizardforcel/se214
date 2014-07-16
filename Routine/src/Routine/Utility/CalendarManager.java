@@ -7,7 +7,6 @@
 package Routine.Utility;
 
 import java.util.*;
-import javax.swing.*;
 
 /**
  *
@@ -15,7 +14,10 @@ import javax.swing.*;
  */
 public class CalendarManager 
 {
-    private int[][] table;
+    public static final int WIDTH = 7;
+    public static final int HEIGHT = 6;
+    
+    private int[][] Table;
     
     public CalendarManager()
     {
@@ -24,7 +26,7 @@ public class CalendarManager
     
     private void Clear()
     {
-        table = new int[][]
+        Table = new int[][]
         {
             {0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0},
@@ -45,24 +47,15 @@ public class CalendarManager
         int total = dt.getActualMaximum(Calendar.DAY_OF_MONTH);
         for(int i = 1; i <= total; i++)
         {
-            int row = offset / 7,
-                col = offset % 7;
-            table[row][col] = i;
+            int row = offset / WIDTH,
+                col = offset % WIDTH;
+            Table[row][col] = i;
             offset++;
         }
     }
     
-    public void Show(JTable jtb)
+    public int At(int row, int col)
     {
-        for(int row = 0; row < 6; row++)
-        {
-           for(int col = 0; col < 7; col++)   
-           {
-              if(table[row][col] == 0)
-                  jtb.setValueAt(null, row, col);
-              else
-                  jtb.setValueAt(table[row][col], row, col);
-           }
-        }
+        return Table[row][col];
     }
 }

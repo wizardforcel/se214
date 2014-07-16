@@ -71,7 +71,17 @@ public class MainForm extends javax.swing.JFrame {
         int month = (Integer)this.MonthSpinner.getValue();
         CalendarManager cm = new CalendarManager();
         cm.SetDate(year, month);
-        cm.Show(CalendarTable);
+        for(int row = 0; row < CalendarManager.HEIGHT; row++)
+        {
+           for(int col = 0; col < CalendarManager.WIDTH; col++)   
+           {
+              int val = cm.At(row, col);
+              if(val == 0)
+                  CalendarTable.setValueAt(null, row, col);
+              else
+                  CalendarTable.setValueAt(val, row, col);
+           }
+        }
     }
     
     private void TrayIcon_MouseClicked(MouseEvent e)

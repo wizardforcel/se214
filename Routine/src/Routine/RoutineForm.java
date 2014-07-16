@@ -10,7 +10,7 @@ import Routine.Utility.NoteRow;
 import Routine.Utility.RoutineManager;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -43,9 +43,34 @@ public class RoutineForm extends javax.swing.JDialog
         this.setTitle("日程安排 " + String.valueOf(year) + "年" +
                       String.valueOf(month) + "月" + String.valueOf(day) + "日");
         Routine.Load(year, month, day);
-        Routine.Show(RoutineTable);
+        ShowRoutine();
     }
     
+    private void ShowRoutine()
+    {
+        DefaultTableModel model = (DefaultTableModel)RoutineTable.getModel();
+        model.setRowCount(0);
+        for(int i = 0; i < Routine.Size(); i++)
+        {
+            NoteRow note = Routine.Get(i);
+            Object[] arr = new Object[6];
+            arr[0] = note.GetTitle();
+            arr[1] = RoutineManager.TimeConvert(note.GetStartTime());
+            arr[2] = RoutineManager.TimeConvert(note.GetEndTime());
+            int itype = note.GetAlertType();
+            String strtype;
+            if(itype == 1)
+                strtype = "提前一天";
+            else if(itype == 2)
+                strtype = "当天";
+            else
+                strtype = "无";
+            arr[3] = strtype;
+            arr[4] = RoutineManager.TimeConvert(note.GetAlertTime());
+            arr[5] = note.GetComment();
+            model.addRow(arr);
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -141,7 +166,7 @@ public class RoutineForm extends javax.swing.JDialog
             if(SettingForm.IsSaved())
             {
                 Routine.UpdateAt(row, note);
-                Routine.Show(RoutineTable);
+                ShowRoutine();
             }
         }
         catch(Exception ex)
@@ -160,7 +185,7 @@ public class RoutineForm extends javax.swing.JDialog
                 JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
                 return;
             Routine.RemoveAt(row);
-            Routine.Show(RoutineTable);
+            ShowRoutine();
         }
         catch(Exception ex)
         {
@@ -178,7 +203,7 @@ public class RoutineForm extends javax.swing.JDialog
             if(SettingForm.IsSaved())
             {
                 Routine.Add(note);
-                Routine.Show(RoutineTable);
+                ShowRoutine();
             }
         }
         catch(Exception ex)
