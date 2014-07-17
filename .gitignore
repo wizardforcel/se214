@@ -1,3 +1,7 @@
 /Routine/lib
 /Routine/build/
 /Routine/dist/
+
+/RoutineMobile/build
+/RoutineMobile/app/build
+/RoutineMobile/app/libs
