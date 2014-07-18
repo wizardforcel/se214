@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package RoutineMobile.Utility;
+package routinemobile.utility;
 
 import java.util.*;
 

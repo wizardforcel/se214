@@ -1,32 +1,23 @@
-package RoutineMobile;
+package routinemobile;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.*;
 import java.lang.*;
-import java.util.ArrayList;
 import java.util.Calendar;
-
-import RoutineMobile.Utility.CalendarManager;
+import routinemobile.utility.CalendarManager;
 
 public class MainActivity extends ActionBarActivity
 {
     private GridView CalendarTable;
+    private TextView DateText;
 
     private void InitViews()
     {
         CalendarTable = (GridView)findViewById(R.id.CalendarTable);
-
-        /*NewButton = (Button)findViewById(R.id.button);
-        NewButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            { NewButton_OnClick(view); }
-        });*/
+        DateText = (TextView)findViewById(R.id.DateText);
     }
 
     @Override
@@ -36,14 +27,14 @@ public class MainActivity extends ActionBarActivity
 
         InitViews();
 
-        ShowCalendar();
-    }
-
-    private void ShowCalendar()
-    {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
+        ShowCalendar(year, month);
+    }
+
+    private void ShowCalendar(int year, int month)
+    {
         CalendarManager cm = new CalendarManager();
         cm.SetDate(year, month);
         final int length = CalendarManager.HEIGHT * CalendarManager.WIDTH;
@@ -57,6 +48,7 @@ public class MainActivity extends ActionBarActivity
                 data[i] = String.valueOf(tmp);
         }
         CalendarTable.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data));
+        DateText.setText(String.format("%d年%d月", year, month));
     }
 
 
