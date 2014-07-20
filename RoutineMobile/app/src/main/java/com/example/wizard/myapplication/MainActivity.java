@@ -1,23 +1,25 @@
-package routinemobile;
+package com.example.wizard.myapplication;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.*;
 import java.lang.*;
 import java.util.Calendar;
-import routinemobile.utility.CalendarManager;
+import com.example.wizard.myapplication.utility.CalendarManager;
 
 public class MainActivity extends ActionBarActivity
 {
     private GridView CalendarTable;
-    private TextView DateText;
+    private Button SettingButton;
 
     private void InitViews()
     {
         CalendarTable = (GridView)findViewById(R.id.CalendarTable);
-        DateText = (TextView)findViewById(R.id.DateText);
+        SettingButton = (Button)findViewById(R.id.SettingButton);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class MainActivity extends ActionBarActivity
                 data[i] = String.valueOf(tmp);
         }
         CalendarTable.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data));
-        DateText.setText(String.format("%d年%d月", year, month));
+        this.setTitle(String.format("%d年%d月", year, month));
     }
 
 

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package routinemobile.utility;
+package com.example.wizard.myapplication.utility;
 
 import java.util.*;
 
