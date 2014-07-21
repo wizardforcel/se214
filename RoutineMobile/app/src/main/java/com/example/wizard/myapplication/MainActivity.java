@@ -108,7 +108,7 @@ public class MainActivity extends ActionBarActivity
                 data[i] = String.valueOf(tmp);
         }
         CalendarTable.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data));
-        this.setTitle(String.format("%d年%d月", year, month));
+        SettingButton.setText(String.format("%d年%d月", year, month));
     }
 
 
