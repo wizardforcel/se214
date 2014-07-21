@@ -15,7 +15,7 @@ import java.awt.event.*;
 import java.sql.*;
 import java.util.*;
 import javax.swing.*;
-import net.sf.json.*;
+import javax.swing.filechooser.*;
 
 /**
  *
@@ -185,6 +185,7 @@ public class MainForm extends javax.swing.JFrame {
         MonthSpinner = new javax.swing.JSpinner();
         ExportButton = new javax.swing.JButton();
         WeatherLabel = new javax.swing.JLabel();
+        ImportButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("日程管理");
@@ -255,6 +256,13 @@ public class MainForm extends javax.swing.JFrame {
 
         WeatherLabel.setText("          ");
 
+        ImportButton.setText("导入");
+        ImportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -271,6 +279,8 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ImportButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ExportButton))
                     .addComponent(CalendarScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
                     .addComponent(WeatherLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -287,7 +297,8 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(ExportButton)))
+                        .addComponent(ExportButton)
+                        .addComponent(ImportButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CalendarScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -364,6 +375,7 @@ public class MainForm extends javax.swing.JFrame {
         try
         {
             JFileChooser dlg = new JFileChooser();
+            dlg.setFileFilter(new FileNameExtensionFilter("数据文件(*.dat)", "dat"));
             if(dlg.showSaveDialog(null) != JFileChooser.APPROVE_OPTION)
                 return;
             String filename = dlg.getSelectedFile().getPath();
@@ -376,10 +388,32 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ExportButtonActionPerformed
 
+    private void ImportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportButtonActionPerformed
+       try
+       {
+            JFileChooser dlg = new JFileChooser();
+            dlg.setFileFilter(new FileNameExtensionFilter("数据文件(*.dat)", "dat"));
+            if(dlg.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
+                return;
+            String filename = dlg.getSelectedFile().getPath();
+            boolean append = (JOptionPane.showConfirmDialog(null, "要删除之前的内容吗？",
+                             "", JOptionPane.OK_CANCEL_OPTION)
+                             == JOptionPane.CANCEL_OPTION);
+            RoutineManager.Import(filename, append);
+            RoutineForm.Clear();
+            JOptionPane.showMessageDialog(null, "导入成功！");
+       }
+       catch(Exception ex)
+       {
+           JOptionPane.showMessageDialog(null, ex.getMessage());
+       }
+    }//GEN-LAST:event_ImportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane CalendarScrollPane;
     private javax.swing.JTable CalendarTable;
     private javax.swing.JButton ExportButton;
+    private javax.swing.JButton ImportButton;
     private javax.swing.JSpinner MonthSpinner;
     private javax.swing.JLabel WeatherLabel;
     private javax.swing.JSpinner YearSpinner;

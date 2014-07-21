@@ -30,6 +30,89 @@ public class RoutineManager
         return Data.size();
     }
     
+    public static void Import(String filename, boolean append)
+           throws SQLException, ClassNotFoundException, IOException
+    {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn 
+           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
+        
+        ArrayList<NoteRow> data = new ArrayList<NoteRow>();
+        if(append)
+            data.addAll(LoadAll());
+        else
+        {
+            String sql = "DELETE FROM note";
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+        }
+        
+        StreamReader sr = new StreamReader(filename);
+        String[] lines = sr.ReadToEnd().split(System.getProperty("line.separator"));
+        sr.close();
+        
+        for(String line : lines)
+        {
+            String[] tmp = line.split(" ");
+            if(tmp.length < 7) continue;
+            NoteRow note = new NoteRow();
+            note.SetDate(Integer.parseInt(tmp[0]));
+            note.SetStartTime(Integer.parseInt(tmp[1]));
+            note.SetEndTime(Integer.parseInt(tmp[2]));
+            note.SetTitle(Base64Utility.Base64Deco(tmp[3]));
+            note.SetComment(Base64Utility.Base64Deco(tmp[4]));
+            note.SetAlertType(Integer.parseInt(tmp[5]));
+            note.SetAlertTime(Integer.parseInt(tmp[6]));
+            if(data.indexOf(note) == -1)
+            {
+                String sql = "INSERT INTO note (date, starttime, endtime, title, " +
+                             "comment, alerttype, alerttime) VALUES (?,?,?,?,?,?,?)";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, note.GetDate());
+                stmt.setInt(2, note.GetStartTime());
+                stmt.setInt(3, note.GetEndTime());
+                stmt.setString(4, note.GetTitle());
+                stmt.setString(5, note.GetComment());
+                stmt.setInt(6, note.GetAlertType());
+                stmt.setInt(7, note.GetAlertTime());
+                stmt.executeUpdate();
+                ResultSet rs = stmt.getGeneratedKeys();
+                rs.next();
+                note.SetID(rs.getInt(1));
+                data.add(note);
+            }
+        }
+        
+        conn.close();
+    }
+    
+    private static ArrayList<NoteRow> LoadAll()
+            throws SQLException, ClassNotFoundException
+    {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn 
+           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
+        String sql = "SELECT * FROM note";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        ArrayList<NoteRow> data = new ArrayList<NoteRow>();
+        while(rs.next())
+        {
+            NoteRow row = new NoteRow();
+            row.SetID(rs.getInt(1));
+            row.SetDate(rs.getInt(2));
+            row.SetStartTime(rs.getInt(3));
+            row.SetEndTime(rs.getInt(4));
+            row.SetTitle(rs.getString(5));
+            row.SetComment(rs.getString(6));
+            row.SetAlertType(rs.getInt(7));
+            row.SetAlertTime(rs.getInt(8));
+            data.add(row);
+        }
+        conn.close();
+        return data;
+    }
+    
     public void Load(int year, int month, int day)
            throws SQLException, ClassNotFoundException
     {
@@ -58,6 +141,9 @@ public class RoutineManager
             Data.add(row);
         }
         conn.close();
+        Year = year;
+        Month = month;
+        Day = day;
     }
     
     public NoteRow Get(int index)
@@ -164,5 +250,10 @@ public class RoutineManager
         }
         sw.close();
         conn.close();
+    }
+    
+    public void Clear()
+    {
+        Year = Month = Day = 0;
     }
 }

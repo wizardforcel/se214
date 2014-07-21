@@ -44,6 +44,9 @@ public class RoutineForm extends javax.swing.JDialog
                       String.valueOf(month) + "月" + String.valueOf(day) + "日");
         Routine.Load(year, month, day);
         ShowRoutine();
+        Year = year;
+        Month = month;
+        Day = day;
     }
     
     private void ShowRoutine()
@@ -70,6 +73,12 @@ public class RoutineForm extends javax.swing.JDialog
             arr[5] = note.GetComment();
             model.addRow(arr);
         }
+    }
+    
+    public void Clear()
+    {
+        Year = Month = Day = 0;
+        this.Routine.Clear();
     }
     
     /**
