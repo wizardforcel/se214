@@ -20,11 +20,11 @@ public class MainActivity extends ActionBarActivity
 {
     private GridView CalendarTable;
     private Button SettingButton;
-    private int Year;
-    private int Month;
-
     AlertDialog DateDialog;
     private DatePicker DatePicker;
+
+    private int Year;
+    private int Month;
 
     private void InitViews()
     {
@@ -72,18 +72,7 @@ public class MainActivity extends ActionBarActivity
     private void DateDialogOKButton_OnClick(DialogInterface dialogInterface, int i)
     {
         int year = DatePicker.getYear();
-        if(year < 1900 || year > 2999)
-        {
-            Toast.makeText(this, "请输入正确的年份！", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        int month = DatePicker.getMonth();
-        if(month < 1 || month > 12)
-        {
-            Toast.makeText(this, "请输入正确的月份！", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        int month = DatePicker.getMonth() + 1;
 
         Year = year;
         Month = month;
@@ -93,6 +82,7 @@ public class MainActivity extends ActionBarActivity
 
     private void SettingButton_OnClick(View view)
     {
+        DatePicker.init(Year, Month - 1, 1, null);
         DateDialog.show();
     }
 

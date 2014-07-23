@@ -1,5 +1,7 @@
 package com.example.wizard.myapplication;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ public class RoutineActivity extends ActionBarActivity {
     private int Day;
     private RoutineManager Manager
       = new RoutineManager();
+    private int RemoveIndex;
 
     private ListView RoutineTable;
     private Button AddButton;
@@ -28,6 +31,22 @@ public class RoutineActivity extends ActionBarActivity {
     private void InitViews()
     {
         RoutineTable = (ListView)findViewById(R.id.RoutineTable);
+        RoutineTable.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            { RoutineTable_OnItemClick(adapterView, view, i, l); }
+        });
+        RoutineTable.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                RoutineTable_OnItemLongClick(adapterView, view, i, l);
+                return true;
+            }
+        });
+
         AddButton = (Button)findViewById(R.id.AddButton);
         AddButton.setOnClickListener(new View.OnClickListener()
         {
@@ -39,8 +58,7 @@ public class RoutineActivity extends ActionBarActivity {
 
     private void ShowRoutine()
     {
-        Manager.SetContext(this);
-        Manager.Load(Year, Month, Day);
+        Manager.Load(this, Year, Month, Day);
         ArrayList<String> titles
           = new ArrayList<String>();
         for(int i = 0; i < Manager.Size(); i++)
@@ -65,6 +83,47 @@ public class RoutineActivity extends ActionBarActivity {
         this.startActivity(intent);
     }
 
+    //短按修改
+    private void RoutineTable_OnItemClick(AdapterView<?> adapterView, View view, int i, long l)
+    {
+        Intent intent = new Intent();
+        intent.setClass(this, SettingActivity.class);
+        intent.putExtra("isadd", false);
+        intent.putExtra("index", i);
+        NoteRow note = Manager.Get(i);
+        intent.putExtra("row", note);
+        intent.putExtra("manager", Manager);
+        this.startActivity(intent);
+    }
+
+    //长按删除
+    private void RoutineTable_OnItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
+    {
+            RemoveIndex = i;
+            new AlertDialog.Builder(this)
+                    .setTitle("确实要删除吗？")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i)
+                        { DeleteDialogOKButton_OnClick(dialogInterface, i); }
+                    })
+                    .setNegativeButton("否", null)
+                    .show();
+    }
+
+    private void DeleteDialogOKButton_OnClick(DialogInterface dialogInterface, int i)
+    {
+        try
+        {
+            Manager.RemoveAt(this, RemoveIndex);
+            ShowRoutine();
+        }
+        catch(Exception ex)
+        {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +132,6 @@ public class RoutineActivity extends ActionBarActivity {
 
         Calendar cal = Calendar.getInstance();
         Intent intent = this.getIntent();
-
         Year = intent.getIntExtra("year", cal.get(Calendar.YEAR));
         Month = intent.getIntExtra("month", cal.get(Calendar.MONTH) + 1);
         Day = intent.getIntExtra("day", cal.get(Calendar.DATE));
@@ -84,12 +142,14 @@ public class RoutineActivity extends ActionBarActivity {
         ShowRoutine();
     }
 
-    /*@Override
-    protected  void OnRecreate()
+    @Override
+    protected void onRestart()
     {
-
-    }*/
-
+        super.onRestart();
+        Manager.Clear();
+        Manager.Load(this, Year, Month, Day);
+        ShowRoutine();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

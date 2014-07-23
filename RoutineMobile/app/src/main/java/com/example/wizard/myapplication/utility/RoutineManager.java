@@ -28,12 +28,6 @@ public class RoutineManager implements Serializable
     private int Day;
     private ArrayList<NoteRow> Data
             = new ArrayList<NoteRow>();
-    private Context Context;
-
-    public void SetContext(Context context)
-    {
-        Context = context;
-    }
 
     public int Size()
     {
@@ -121,11 +115,11 @@ public class RoutineManager implements Serializable
         return data;
     }*/
     
-    public void Load(int year, int month, int day)
+    public void Load(Context context, int year, int month, int day)
     {
         if(Year == year && Month == month && Day == day)
             return;
-        SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
+        SQLiteDatabase db = new DatabaseHelper(context).getReadableDatabase();
         String sql = "SELECT * FROM note WHERE date=?";
         int date = year * 10000 + month * 100 + day;
         Cursor cur = db.rawQuery(sql, new String[]{String.valueOf(date)});
@@ -133,17 +127,18 @@ public class RoutineManager implements Serializable
         while(cur.moveToNext())
         {
             NoteRow row = new NoteRow();
-            row.SetID(cur.getInt(1));
-            row.SetDate(cur.getInt(2));
-            row.SetStartTime(cur.getInt(3));
-            row.SetEndTime(cur.getInt(4));
-            row.SetTitle(cur.getString(5));
-            row.SetComment(cur.getString(6));
-            row.SetAlertType(cur.getInt(7));
-            row.SetAlertTime(cur.getInt(8));
+            row.SetID(cur.getInt(cur.getColumnIndex("id")));
+            row.SetDate(cur.getInt(cur.getColumnIndex("date")));
+            row.SetStartTime(cur.getInt(cur.getColumnIndex("starttime")));
+            row.SetEndTime(cur.getInt(cur.getColumnIndex("endtime")));
+            row.SetTitle(cur.getString(cur.getColumnIndex("title")));
+            row.SetComment(cur.getString(cur.getColumnIndex("comment")));
+            row.SetAlertType(cur.getInt(cur.getColumnIndex("alerttype")));
+            row.SetAlertTime(cur.getInt(cur.getColumnIndex("alerttime")));
             Data.add(row);
         }
         cur.close();
+        db.close();
         Year = year;
         Month = month;
         Day = day;
@@ -161,13 +156,13 @@ public class RoutineManager implements Serializable
         return String.format("%02d:%02d", hr, min);
     }
     
-    public void UpdateAt(int index, NoteRow note)
+    public void UpdateAt(Context context, int index, NoteRow note)
            throws Exception
     {
         NoteRow oldnote = Data.get(index);
         if(!oldnote.equals(note) && Data.indexOf(note) != -1)
             throw new Exception("该计划已存在。");
-        SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
+        SQLiteDatabase db = new DatabaseHelper(context).getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put("starttime", note.GetStartTime());
         values.put("endtime", note.GetEndTime());
@@ -176,24 +171,26 @@ public class RoutineManager implements Serializable
         values.put("alerttype", note.GetAlertType());
         values.put("alerttime", note.GetAlertTime());
         db.update("note", values, "id=?", new String[]{String.valueOf(oldnote.GetID())});
+        db.close();
         Data.set(index, note);
     }
   
-    public void RemoveAt(int index)
+    public void RemoveAt(Context context, int index)
            throws Exception
     {
         NoteRow note = Data.get(index);
-        SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
+        SQLiteDatabase db = new DatabaseHelper(context).getReadableDatabase();
         db.delete("note", "id=?", new String[]{String.valueOf(note.GetID())});
+        db.close();
         Data.remove(note);
     }
     
-    public void Add(NoteRow note)
+    public void Add(Context context, NoteRow note)
            throws Exception
     {
         if(Data.indexOf(note) != -1)
             throw new Exception("该计划已存在。");
-        SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
+        SQLiteDatabase db = new DatabaseHelper(context).getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put("date", note.GetDate());
         values.put("starttime", note.GetStartTime());
@@ -203,6 +200,7 @@ public class RoutineManager implements Serializable
         values.put("alerttype", note.GetAlertType());
         values.put("alerttime", note.GetAlertTime());
         long rowid = db.insert("note", null, values);
+        db.close();
         note.SetID((int)rowid);
         Data.add(note);
     }
