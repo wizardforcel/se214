@@ -2,6 +2,7 @@ package com.example.wizard.myapplication;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
@@ -19,6 +20,8 @@ public class MainActivity extends ActionBarActivity
 {
     private GridView CalendarTable;
     private Button SettingButton;
+    private int Year;
+    private int Month;
 
     AlertDialog DateDialog;
     private EditText YearText;
@@ -27,6 +30,11 @@ public class MainActivity extends ActionBarActivity
     private void InitViews()
     {
         CalendarTable = (GridView)findViewById(R.id.CalendarTable);
+        CalendarTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            { RoutineTable_OnItemClick(adapterView, view, i, l); }
+        });
 
         SettingButton = (Button)findViewById(R.id.SettingButton);
         SettingButton.setOnClickListener(new View.OnClickListener()
@@ -50,6 +58,20 @@ public class MainActivity extends ActionBarActivity
         MonthText = (EditText)datedialogview.findViewById((R.id.MonthText));
     }
 
+    private void RoutineTable_OnItemClick(AdapterView<?> adapterView, View view, int i, long l)
+    {
+        String daystr = (String)CalendarTable.getAdapter().getItem(i);
+        if(daystr.equals("")) return;
+        int day = Integer.parseInt(daystr);
+
+        Intent intent = new Intent();
+        intent.setClass(this, RoutineActivity.class);
+        intent.putExtra("year", Year);
+        intent.putExtra("month", Month);
+        intent.putExtra("day", day);
+        this.startActivity(intent);
+    }
+
     private void DateDialogOKButton_OnClick(DialogInterface dialogInterface, int i)
     {
         String yearstr = YearText.getText().toString();
@@ -68,7 +90,9 @@ public class MainActivity extends ActionBarActivity
             return;
         }
 
-        ShowCalendar(year, month);
+        Year = year;
+        Month = month;
+        ShowCalendar();
     }
 
 
@@ -81,22 +105,22 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setTitle("日程管理");
 
         InitViews();
 
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        ShowCalendar(year, month);
-
-        YearText.setText(String.valueOf(year));
-        MonthText.setText(String.valueOf(month));
+        Year = cal.get(Calendar.YEAR);
+        Month = cal.get(Calendar.MONTH) + 1;
+        ShowCalendar();
+        YearText.setText(String.valueOf(Year));
+        MonthText.setText(String.valueOf(Month));
     }
 
-    private void ShowCalendar(int year, int month)
+    private void ShowCalendar()
     {
         CalendarManager cm = new CalendarManager();
-        cm.SetDate(year, month);
+        cm.SetDate(Year, Month);
         final int length = CalendarManager.HEIGHT * CalendarManager.WIDTH;
         String[] data = new String[length];
         for(int i = 0; i < length; i++)
@@ -108,7 +132,7 @@ public class MainActivity extends ActionBarActivity
                 data[i] = String.valueOf(tmp);
         }
         CalendarTable.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data));
-        SettingButton.setText(String.format("%d年%d月", year, month));
+        SettingButton.setText(String.format("%d年%d月", Year, Month));
     }
 
 

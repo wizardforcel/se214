@@ -23,7 +23,7 @@ public class BaiduAPI
            throws MalformedURLException, IOException
     {
         String retstr = wc.HTTPGet("http://api.map.baidu.com/location/ip" + 
-                                   "?ak=" + BaiduAPI.API_KEY);
+                                   "?ak=" + BaiduAPI.API_KEY + "&ip=" + ip);
         JSONObject json = JSONObject.fromObject(retstr);
         int errno = json.getInt("status");
         if(errno != 0)
@@ -37,8 +37,8 @@ public class BaiduAPI
     {
         wc.SetCharset("utf-8");
         String retstr = wc.HTTPGet("http://api.map.baidu.com/telematics/v3/weather" + 
-                                   "?location=" + city + "&output=json&ak="+ 
-                                   BaiduAPI.API_KEY);
+                                   "?location=" + URLEncoder.encode(city, "utf-8") + 
+                                   "&output=json&ak="+ BaiduAPI.API_KEY);
         JSONObject json = JSONObject.fromObject(retstr);
         int errno = json.getInt("error");
         if(errno != 0)
