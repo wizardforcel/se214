@@ -20,6 +20,10 @@
             android:name=".RoutineActivity"
             android:label="@string/title_activity_routine1" >
         </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting" >
+        </activity>
     </application>
 
 </manifest>

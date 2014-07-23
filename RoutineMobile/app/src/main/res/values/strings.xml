@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="new_button">New Button</string>
     <string name="title_activity_routine1">Routine1Activity</string>
+    <string name="title_activity_setting">SettingActivity</string>
 
 </resources>

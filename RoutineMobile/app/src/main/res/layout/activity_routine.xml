@@ -30,12 +30,6 @@
                 android:id="@+id/AddButton"
                 android:layout_weight="0.5" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="修改"
-                android:id="@+id/RmButton"
-                android:layout_weight="0.5" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

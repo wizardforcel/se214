@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        String sql = "CREATE TABLE IF NOT EXISTS note (" +
+        String sql = "CREATE TABLE note (" +
                      "id INTEGER PRIMARY KEY," +
                      "date INT," +
                      "starttime INT," +

@@ -24,8 +24,7 @@ public class MainActivity extends ActionBarActivity
     private int Month;
 
     AlertDialog DateDialog;
-    private EditText YearText;
-    private EditText MonthText;
+    private DatePicker DatePicker;
 
     private void InitViews()
     {
@@ -44,9 +43,9 @@ public class MainActivity extends ActionBarActivity
             { SettingButton_OnClick(view); }
         });
 
-        View datedialogview = LayoutInflater.from(this).inflate(R.layout.date_dialog, null);
+        DatePicker = new DatePicker(this);
         DateDialog = new AlertDialog.Builder(this).setTitle("请输入日期")
-                .setView(datedialogview)
+                .setView(DatePicker)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener()
                 {
                     @Override
@@ -54,8 +53,6 @@ public class MainActivity extends ActionBarActivity
                     { DateDialogOKButton_OnClick(dialogInterface, i); }
                 })
                 .setNegativeButton("取消", null).create();
-        YearText = (EditText)datedialogview.findViewById(R.id.YearText);
-        MonthText = (EditText)datedialogview.findViewById((R.id.MonthText));
     }
 
     private void RoutineTable_OnItemClick(AdapterView<?> adapterView, View view, int i, long l)
@@ -74,16 +71,14 @@ public class MainActivity extends ActionBarActivity
 
     private void DateDialogOKButton_OnClick(DialogInterface dialogInterface, int i)
     {
-        String yearstr = YearText.getText().toString();
-        int year = yearstr.equals("")? 0: Integer.parseInt(yearstr);
+        int year = DatePicker.getYear();
         if(year < 1900 || year > 2999)
         {
             Toast.makeText(this, "请输入正确的年份！", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String monthstr = MonthText.getText().toString();
-        int month = monthstr.equals("")? 0: Integer.parseInt(monthstr);
+        int month = DatePicker.getMonth();
         if(month < 1 || month > 12)
         {
             Toast.makeText(this, "请输入正确的月份！", Toast.LENGTH_SHORT).show();
@@ -113,8 +108,7 @@ public class MainActivity extends ActionBarActivity
         Year = cal.get(Calendar.YEAR);
         Month = cal.get(Calendar.MONTH) + 1;
         ShowCalendar();
-        YearText.setText(String.valueOf(Year));
-        MonthText.setText(String.valueOf(Month));
+        DatePicker.init(Year, Month, 1, null);
     }
 
     private void ShowCalendar()

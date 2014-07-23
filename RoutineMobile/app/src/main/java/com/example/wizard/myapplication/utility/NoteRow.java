@@ -6,13 +6,14 @@
 
 package com.example.wizard.myapplication.utility;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Wizard
  */
-public class NoteRow 
+public class NoteRow implements Serializable
 {   
     private int ID;
     private int Date;

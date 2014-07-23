@@ -6,12 +6,14 @@
 
 package com.example.wizard.myapplication.utility;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
@@ -19,7 +21,7 @@ import java.util.*;
  *
  * @author Wizard
  */
-public class RoutineManager 
+public class RoutineManager implements Serializable
 {
     private int Year;
     private int Month;
@@ -28,7 +30,7 @@ public class RoutineManager
             = new ArrayList<NoteRow>();
     private Context Context;
 
-    /*public RoutineManager(Context context)
+    public void SetContext(Context context)
     {
         Context = context;
     }
@@ -38,7 +40,7 @@ public class RoutineManager
         return Data.size();
     }
     
-    public static void Import(String filename, boolean append)
+    /*public static void Import(String filename, boolean append)
            throws ClassNotFoundException, IOException
     {
         SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
@@ -117,35 +119,31 @@ public class RoutineManager
         }
         conn.close();
         return data;
-    }
+    }*/
     
     public void Load(int year, int month, int day)
-           throws SQLException, ClassNotFoundException
     {
         if(Year == year && Month == month && Day == day)
             return;
         SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
         String sql = "SELECT * FROM note WHERE date=?";
-        Cursor cur = db.query
-        PreparedStatement stmt = conn.prepareStatement(sql);
         int date = year * 10000 + month * 100 + day;
-        stmt.setInt(1, date);
-        ResultSet rs = stmt.executeQuery();
+        Cursor cur = db.rawQuery(sql, new String[]{String.valueOf(date)});
         Data.clear();
-        while(rs.next())
+        while(cur.moveToNext())
         {
             NoteRow row = new NoteRow();
-            row.SetID(rs.getInt(1));
-            row.SetDate(rs.getInt(2));
-            row.SetStartTime(rs.getInt(3));
-            row.SetEndTime(rs.getInt(4));
-            row.SetTitle(rs.getString(5));
-            row.SetComment(rs.getString(6));
-            row.SetAlertType(rs.getInt(7));
-            row.SetAlertTime(rs.getInt(8));
+            row.SetID(cur.getInt(1));
+            row.SetDate(cur.getInt(2));
+            row.SetStartTime(cur.getInt(3));
+            row.SetEndTime(cur.getInt(4));
+            row.SetTitle(cur.getString(5));
+            row.SetComment(cur.getString(6));
+            row.SetAlertType(cur.getInt(7));
+            row.SetAlertTime(cur.getInt(8));
             Data.add(row);
         }
-        conn.close();
+        cur.close();
         Year = year;
         Month = month;
         Day = day;
@@ -164,69 +162,52 @@ public class RoutineManager
     }
     
     public void UpdateAt(int index, NoteRow note)
-           throws ClassNotFoundException, SQLException, Exception
+           throws Exception
     {
         NoteRow oldnote = Data.get(index);
         if(!oldnote.equals(note) && Data.indexOf(note) != -1)
             throw new Exception("该计划已存在。");
-        Class.forName("org.sqlite.JDBC");
-        Connection conn 
-           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
-        String sql = "UPDATE note SET starttime=?, " +
-                     "endtime=?, title=?, comment=?, alerttype=?, " + 
-                     "alerttime=? WHERE id=?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, note.GetStartTime());
-        stmt.setInt(2, note.GetEndTime());
-        stmt.setString(3, note.GetTitle());
-        stmt.setString(4, note.GetComment());
-        stmt.setInt(5, note.GetAlertType());
-        stmt.setInt(6, note.GetAlertTime());
-        stmt.setInt(7, oldnote.GetID());
-        stmt.executeUpdate();
+        SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("starttime", note.GetStartTime());
+        values.put("endtime", note.GetEndTime());
+        values.put("title", note.GetTitle());
+        values.put("comment", note.GetComment());
+        values.put("alerttype", note.GetAlertType());
+        values.put("alerttime", note.GetAlertTime());
+        db.update("note", values, "id=?", new String[]{String.valueOf(oldnote.GetID())});
         Data.set(index, note);
     }
   
     public void RemoveAt(int index)
-           throws ClassNotFoundException, SQLException, Exception
+           throws Exception
     {
         NoteRow note = Data.get(index);
-        Class.forName("org.sqlite.JDBC");
-        Connection conn 
-           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
-        String sql = "DELETE FROM note WHERE id=?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, note.GetID());
-        stmt.executeUpdate();
+        SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
+        db.delete("note", "id=?", new String[]{String.valueOf(note.GetID())});
         Data.remove(note);
     }
     
     public void Add(NoteRow note)
-           throws ClassNotFoundException, SQLException, Exception
+           throws Exception
     {
         if(Data.indexOf(note) != -1)
             throw new Exception("该计划已存在。");
-        Class.forName("org.sqlite.JDBC");
-        Connection conn 
-           = DriverManager.getConnection("jdbc:sqlite:" + Program.FILE_PATH);
-        String sql = "INSERT INTO note (date, starttime, endtime, title, " +
-                     "comment, alerttype, alerttime) VALUES (?,?,?,?,?,?,?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, note.GetDate());
-        stmt.setInt(2, note.GetStartTime());
-        stmt.setInt(3, note.GetEndTime());
-        stmt.setString(4, note.GetTitle());
-        stmt.setString(5, note.GetComment());
-        stmt.setInt(6, note.GetAlertType());
-        stmt.setInt(7, note.GetAlertTime());
-        stmt.executeUpdate();
-        ResultSet rs = stmt.getGeneratedKeys();
-        rs.next();
-        note.SetID(rs.getInt(1));
+        SQLiteDatabase db = new DatabaseHelper(Context).getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("date", note.GetDate());
+        values.put("starttime", note.GetStartTime());
+        values.put("endtime", note.GetEndTime());
+        values.put("title", note.GetTitle());
+        values.put("comment", note.GetComment());
+        values.put("alerttype", note.GetAlertType());
+        values.put("alerttime", note.GetAlertTime());
+        long rowid = db.insert("note", null, values);
+        note.SetID((int)rowid);
         Data.add(note);
     }
     
-    public static void Export(String filename) 
+    /*public static void Export(String filename)
            throws ClassNotFoundException, SQLException,
                   FileNotFoundException, UnsupportedEncodingException, IOException
     {
@@ -255,10 +236,10 @@ public class RoutineManager
         }
         sw.close();
         conn.close();
-    }
+    }*/
     
     public void Clear()
     {
         Year = Month = Day = 0;
-    }*/
+    }
 }
