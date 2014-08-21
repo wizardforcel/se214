@@ -56,7 +56,7 @@ public class StreamReader extends BufferedReader
     }
     
     //读到头
-    public String ReadToEnd()
+    public String readToEnd()
            throws IOException
     {
         StringBuilder sb = new StringBuilder();

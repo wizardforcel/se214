@@ -65,8 +65,8 @@ public class StreamWriter extends BufferedWriter
         this(file, false);
     }
     
-    //WriteLine
-    public void WriteLine(String str)
+    //writeln
+    public void writeln(String str)
            throws IOException
     {
         this.write(str);

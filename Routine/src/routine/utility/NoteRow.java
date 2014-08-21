@@ -4,16 +4,15 @@
  * and open the template in the editor.
  */
 
-package com.example.wizard.myapplication.utility;
+package routine.utility;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Wizard
  */
-public class NoteRow implements Serializable
+public class NoteRow 
 {   
     private int id;
     private int date;

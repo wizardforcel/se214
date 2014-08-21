@@ -25,13 +25,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="标题"
-                    android:id="@+id/TitleLabel"
+                    android:id="@+id/titleLabel"
                     android:layout_weight="0.1" />
 
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/TitleText"
+                    android:id="@+id/titleText"
                     android:layout_weight="0.9" />
 
             </TableRow>
@@ -44,13 +44,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="内容"
-                    android:id="@+id/ContentLabel"
+                    android:id="@+id/contentLabel"
                     android:layout_weight="0.1" />
 
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ContentText"
+                    android:id="@+id/contentText"
                     android:layout_weight="0.9" />
             </TableRow>
 
@@ -62,14 +62,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="开始时间"
-                    android:id="@+id/StartLabel"
+                    android:id="@+id/startLabel"
                     android:layout_weight="0.1" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:00"
-                    android:id="@+id/StartTimeButton"
+                    android:id="@+id/startTimeButton"
                     android:layout_weight="0.9" />
             </TableRow>
 
@@ -81,14 +81,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="停止时间"
-                    android:id="@+id/StopLabel"
+                    android:id="@+id/stopLabel"
                     android:layout_weight="0.1" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:00"
-                    android:id="@+id/StopTimeButton"
+                    android:id="@+id/stopTimeButton"
                     android:layout_weight="0.9" />
             </TableRow>
 
@@ -100,14 +100,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="提醒方式"
-                    android:id="@+id/textView"
+                    android:id="@+id/alertTypeLabel"
                     android:layout_weight="0.1" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="无"
-                    android:id="@+id/AlertTypeButton"
+                    android:id="@+id/alertTypeButton"
                     android:layout_weight="0.9" />
             </TableRow>
 
@@ -119,14 +119,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="提醒时间"
-                    android:id="@+id/AlertLabel"
+                    android:id="@+id/alertTimeLabel"
                     android:layout_weight="0.1" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:00"
-                    android:id="@+id/AlertTimeButton"
+                    android:id="@+id/alertTimeButton"
                     android:layout_weight="0.9" />
             </TableRow>
 
@@ -141,14 +141,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="确定"
-                android:id="@+id/OKButton"
+                android:id="@+id/okButton"
                 android:layout_weight="0.5" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="取消"
-                android:id="@+id/CancelButton"
+                android:id="@+id/cancelButton"
                 android:layout_weight="0.5" />
         </LinearLayout>
 

@@ -12,7 +12,7 @@
         <DatePicker
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/DatePicker"
+            android:id="@+id/datePicker"
             android:calendarViewShown="false" />
     </LinearLayout>
 </LinearLayout>

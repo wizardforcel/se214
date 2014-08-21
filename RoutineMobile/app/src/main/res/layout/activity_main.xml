@@ -20,56 +20,56 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mon"
-                android:id="@+id/MonText"
+                android:id="@+id/monText"
                 android:layout_weight="0.14" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tue"
-                android:id="@+id/TueText"
+                android:id="@+id/tueText"
                 android:layout_weight="0.14" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wed"
-                android:id="@+id/WedText"
+                android:id="@+id/wedText"
                 android:layout_weight="0.14" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thu"
-                android:id="@+id/ThuText"
+                android:id="@+id/thuText"
                 android:layout_weight="0.14" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fri"
-                android:id="@+id/FriText"
+                android:id="@+id/friText"
                 android:layout_weight="0.14" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sat"
-                android:id="@+id/SatText"
+                android:id="@+id/satText"
                 android:layout_weight="0.14" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sun"
-                android:id="@+id/SunText"
+                android:id="@+id/sunText"
                 android:layout_weight="0.14" />
         </LinearLayout>
 
         <GridView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/CalendarTable"
+            android:id="@+id/calendarTable"
             android:numColumns="7"
             android:choiceMode="singleChoice"
             android:layout_weight="1" />
@@ -83,21 +83,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="设置日历"
-                android:id="@+id/SettingButton"
+                android:id="@+id/settingButton"
                 android:layout_weight="0.33" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="导入"
-                android:id="@+id/ImportButton"
+                android:id="@+id/importButton"
                 android:layout_weight="0.33" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="导出"
-                android:id="@+id/ExportButton"
+                android:id="@+id/exportButton"
                 android:layout_weight="0.33" />
         </LinearLayout>
 

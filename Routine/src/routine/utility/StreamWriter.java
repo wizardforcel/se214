@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Routine.Utility;
+package routine.utility;
 
 import java.io.*;
 
@@ -66,7 +66,7 @@ public class StreamWriter extends BufferedWriter
     }
     
     //WriteLine
-    public void WriteLine(String str)
+    public void writeln(String str)
            throws IOException
     {
         this.write(str);

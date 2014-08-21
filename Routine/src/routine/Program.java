@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Routine;
+package routine;
 
 import java.util.*;
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class Program
           String style = UIManager.getSystemLookAndFeelClassName();
           UIManager.setLookAndFeel(style);
 
-          CreateDB();
+          createDb();
           
           MainForm mf = new MainForm();
           mf.setVisible(true);
@@ -39,7 +39,7 @@ public class Program
         }
     }
     
-    private static void CreateDB() 
+    private static void createDb() 
             throws SQLException, ClassNotFoundException
     {
         //String path = System.getProperty("user.dir");

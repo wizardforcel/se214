@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Routine.Utility;
+package routine.utility;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -16,13 +16,13 @@ import sun.misc.*;
  */
 public class Base64Utility 
 {
-    public static String Base64Enco(String text) 
+    public static String base64Enco(String text) 
            throws UnsupportedEncodingException
     {
         return new BASE64Encoder().encode(text.getBytes("UTF-8"));
         //return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
     }
-    public static String Base64Deco(String text) 
+    public static String base64Deco(String text) 
            throws UnsupportedEncodingException, IOException
     {
         return new String(new BASE64Decoder().decodeBuffer(text), "UTF-8");

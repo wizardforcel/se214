@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 
-package Routine;
+package routine;
 
-import Routine.BaiduAPI.BaiduAPI;
-import Routine.BaiduAPI.LocResult;
-import Routine.BaiduAPI.WeatherResult;
-import Routine.Utility.*;
+import routine.utility.CalendarManager;
+import routine.utility.WizardHTTP;
+import routine.utility.RoutineManager;
+import routine.baiduapi.BaiduAPI;
+import routine.baiduapi.LocResult;
+import routine.baiduapi.WeatherResult;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -31,28 +33,28 @@ public class MainForm extends javax.swing.JFrame {
     {
         initComponents();
         this.setLocationRelativeTo(null);
-        CalendarTable.getTableHeader().setReorderingAllowed(false);
-        CalendarTable.getTableHeader().setResizingAllowed(false);
-        RoutineForm = new RoutineForm();
+        calendarTable.getTableHeader().setReorderingAllowed(false);
+        calendarTable.getTableHeader().setResizingAllowed(false);
+        routineForm = new RoutineForm();
         
-        InitTrayIcon();
+        initTrayIcon();
     }
 
-    private void InitTrayIcon()
+    private void initTrayIcon()
             throws AWTException, Exception
     {
         if(!SystemTray.isSupported()) 
             throw new Exception("对不起，该系统不支持托盘。");
-        TrayIcon = new TrayIcon(
+        trayIcon = new TrayIcon(
                    new ImageIcon(MainForm.class.getResource("/rsrc/icon.jpg"))
                                          .getImage());
-        TrayIcon.setToolTip("日程管理");
-        TrayIcon.setImageAutoSize(true);
-        TrayIcon.addMouseListener(new MouseListener() 
+        trayIcon.setToolTip("日程管理");
+        trayIcon.setImageAutoSize(true);
+        trayIcon.addMouseListener(new MouseListener() 
         {       
             @Override
             public void mouseClicked(MouseEvent e) 
-            { TrayIcon_MouseClicked(e); }
+            { trayIcon_Click(e); }
             @Override
             public void mousePressed(MouseEvent e) { }
             @Override
@@ -62,35 +64,35 @@ public class MainForm extends javax.swing.JFrame {
             @Override
             public void mouseExited(MouseEvent e) { }
         });
-        SystemTray.getSystemTray().add(TrayIcon);
+        SystemTray.getSystemTray().add(trayIcon);
     }
     
-    private void ShowCalendar()
+    private void showCalendar()
     {
-        int year = (Integer)this.YearSpinner.getValue();
-        int month = (Integer)this.MonthSpinner.getValue();
+        int year = (Integer)this.yearSpinner.getValue();
+        int month = (Integer)this.monthSpinner.getValue();
         CalendarManager cm = new CalendarManager();
-        cm.SetDate(year, month);
+        cm.setDate(year, month);
         for(int row = 0; row < CalendarManager.HEIGHT; row++)
         {
            for(int col = 0; col < CalendarManager.WIDTH; col++)   
            {
-              int val = cm.At(row, col);
+              int val = cm.at(row, col);
               if(val == 0)
-                  CalendarTable.setValueAt(null, row, col);
+                  calendarTable.setValueAt(null, row, col);
               else
-                  CalendarTable.setValueAt(val, row, col);
+                  calendarTable.setValueAt(val, row, col);
            }
         }
     }
     
-    private void TrayIcon_MouseClicked(MouseEvent e)
+    private void trayIcon_Click(MouseEvent e)
     {
         if(e.getClickCount() != 2) return;
         setVisible(true);
     }
     
-    private void DoThread()
+    private void doThread()
     {
         try {
         int lastmin = -1;
@@ -128,14 +130,14 @@ public class MainForm extends javax.swing.JFrame {
             {
                 rowcount++;
                 String title = rs.getString(1);
-                TrayIcon.displayMessage("信息提示：", title + " 即将开始",
+                trayIcon.displayMessage("信息提示：", title + " 即将开始",
                                         java.awt.TrayIcon.MessageType.INFO);
             }
             System.out.println("Rowcount: " + String.valueOf(rowcount));
             Thread.sleep(10 * 1000);
             } catch(Exception ex) 
             {
-                TrayIcon.displayMessage("信息提示：", ex.getMessage(),
+                trayIcon.displayMessage("信息提示：", ex.getMessage(),
                                         java.awt.TrayIcon.MessageType.ERROR);
             }
         }
@@ -143,28 +145,28 @@ public class MainForm extends javax.swing.JFrame {
         { JOptionPane.showMessageDialog(null, ex.getMessage()); }
     }
     
-    private void GetWeather()
+    private void getWeather()
     {
         try
         {
             WizardHTTP wc = new WizardHTTP();
-            wc.SetDefHeader(false);
-            LocResult lr = BaiduAPI.GetLoc(wc, "");
+            wc.setDefHeader(false);
+            LocResult lr = BaiduAPI.getLoc(wc, "");
             if(lr.errno != 0)
                 throw new Exception(lr.errmsg);
             String city = lr.city;
-            WeatherResult wr = BaiduAPI.GetWeater(wc, city);
+            WeatherResult wr = BaiduAPI.getWeater(wc, city);
             if(wr.errno != 0)
                 throw new Exception(wr.errmsg);
             String weather = wr.weather;
             String wind = wr.wind;
             String temperature = wr.temprature;
-            this.WeatherLabel.setText(city + " " + temperature + " " + 
+            this.weatherLabel.setText(city + " " + temperature + " " + 
                                       weather + " " + wind);
         }
         catch(Exception ex)
         {
-            this.WeatherLabel.setText("天气获取失败！" + ex.getMessage());
+            this.weatherLabel.setText("天气获取失败！" + ex.getMessage());
         }
     }
     
@@ -177,15 +179,15 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        CalendarScrollPane = new javax.swing.JScrollPane();
-        CalendarTable = new javax.swing.JTable();
-        YearSpinner = new javax.swing.JSpinner();
+        calendarScrollPane = new javax.swing.JScrollPane();
+        calendarTable = new javax.swing.JTable();
+        yearSpinner = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        MonthSpinner = new javax.swing.JSpinner();
-        ExportButton = new javax.swing.JButton();
-        WeatherLabel = new javax.swing.JLabel();
-        ImportButton = new javax.swing.JButton();
+        monthSpinner = new javax.swing.JSpinner();
+        exportButton = new javax.swing.JButton();
+        weatherLabel = new javax.swing.JLabel();
+        importButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("日程管理");
@@ -193,16 +195,16 @@ public class MainForm extends javax.swing.JFrame {
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
+                form_Open(evt);
             }
         });
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
-                formWindowStateChanged(evt);
+                form_StateChange(evt);
             }
         });
 
-        CalendarTable.setModel(new javax.swing.table.DefaultTableModel(
+        calendarTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -223,17 +225,17 @@ public class MainForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        CalendarTable.setRowSelectionAllowed(false);
-        CalendarTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        calendarTable.setRowSelectionAllowed(false);
+        calendarTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                CalendarTableMouseClicked(evt);
+                calendarTable_Click(evt);
             }
         });
-        CalendarScrollPane.setViewportView(CalendarTable);
+        calendarScrollPane.setViewportView(calendarTable);
 
-        YearSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+        yearSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                YearSpinnerStateChanged(evt);
+                yearSpinner_StateChange(evt);
             }
         });
 
@@ -241,25 +243,25 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel2.setText("月份");
 
-        MonthSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+        monthSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                MonthSpinnerStateChanged(evt);
+                monthSpinner_StateChange(evt);
             }
         });
 
-        ExportButton.setText("导出");
-        ExportButton.addActionListener(new java.awt.event.ActionListener() {
+        exportButton.setText("导出");
+        exportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ExportButtonActionPerformed(evt);
+                exportButton_Click(evt);
             }
         });
 
-        WeatherLabel.setText("          ");
+        weatherLabel.setText("          ");
 
-        ImportButton.setText("导入");
-        ImportButton.addActionListener(new java.awt.event.ActionListener() {
+        importButton.setText("导入");
+        importButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ImportButtonActionPerformed(evt);
+                importButton_Click(evt);
             }
         });
 
@@ -273,17 +275,17 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(yearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(monthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ImportButton)
+                        .addComponent(importButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ExportButton))
-                    .addComponent(CalendarScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-                    .addComponent(WeatherLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(exportButton))
+                    .addComponent(calendarScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                    .addComponent(weatherLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -292,86 +294,84 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(MonthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(monthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2))
-                    .addComponent(YearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yearSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(ExportButton)
-                        .addComponent(ImportButton)))
+                        .addComponent(exportButton)
+                        .addComponent(importButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CalendarScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(calendarScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(WeatherLabel)
+                .addComponent(weatherLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void YearSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_YearSpinnerStateChanged
-        ShowCalendar();
-    }//GEN-LAST:event_YearSpinnerStateChanged
+    private void yearSpinner_StateChange(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_yearSpinner_StateChange
+        showCalendar();
+    }//GEN-LAST:event_yearSpinner_StateChange
 
-    private void MonthSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_MonthSpinnerStateChanged
-        ShowCalendar();
-    }//GEN-LAST:event_MonthSpinnerStateChanged
+    private void monthSpinner_StateChange(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_monthSpinner_StateChange
+        showCalendar();
+    }//GEN-LAST:event_monthSpinner_StateChange
 
-    private void CalendarTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CalendarTableMouseClicked
+    private void calendarTable_Click(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_calendarTable_Click
         try
         {
             if(evt.getClickCount() == 1) return;
-            int year = (Integer)this.YearSpinner.getValue();
-            int month = (Integer)this.MonthSpinner.getValue();
-            int irow = CalendarTable.getSelectedRow();
-            int icol = CalendarTable.getSelectedColumn();
-            Integer day = (Integer)CalendarTable.getValueAt(irow, icol);
+            int year = (Integer)this.yearSpinner.getValue();
+            int month = (Integer)this.monthSpinner.getValue();
+            int irow = calendarTable.getSelectedRow();
+            int icol = calendarTable.getSelectedColumn();
+            Integer day = (Integer)calendarTable.getValueAt(irow, icol);
             if(day != null)
             {
-              RoutineForm.SetDate(year, month, day);
-              RoutineForm.setVisible(true);
+              routineForm.setDate(year, month, day);
+              routineForm.setVisible(true);
             }
         }
         catch(Exception ex)
         {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
-    }//GEN-LAST:event_CalendarTableMouseClicked
+    }//GEN-LAST:event_calendarTable_Click
 
-    private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
+    private void form_StateChange(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_form_StateChange
         if(evt.getNewState() == JFrame.ICONIFIED)
         {
             this.setExtendedState(JFrame.NORMAL);
             this.setVisible(false);
-            TrayIcon.displayMessage("我在这里...", "双击我可以显示窗口。",
+            trayIcon.displayMessage("我在这里...", "双击我可以显示窗口。",
                                     java.awt.TrayIcon.MessageType.INFO);
         }
-    }//GEN-LAST:event_formWindowStateChanged
+    }//GEN-LAST:event_form_StateChange
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+    private void form_Open(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_form_Open
         Calendar dt = Calendar.getInstance();
         int year = dt.get(Calendar.YEAR);
         int month = dt.get(Calendar.MONTH) + 1;
-        YearSpinner.setModel(new SpinnerNumberModel(year, 1970, 2999, 1));
-        MonthSpinner.setModel(new SpinnerNumberModel(month, 1, 12, 1));
-        ShowCalendar();
+        yearSpinner.setModel(new SpinnerNumberModel(year, 1970, 2999, 1));
+        monthSpinner.setModel(new SpinnerNumberModel(month, 1, 12, 1));
+        showCalendar();
         
-        Thread tr = new Thread(new Runnable()
+        new Thread(new Runnable()
         {
             @Override
-            public void run() { DoThread(); }
-        });
-        tr.start();
+            public void run() { doThread(); }
+        }).start();
         
-        tr = new Thread(new Runnable()
+        new Thread(new Runnable()
         {
             @Override
-            public void run() { GetWeather(); }
-        });
-        tr.start();
-    }//GEN-LAST:event_formWindowOpened
+            public void run() { getWeather(); }
+        }).start();
+    }//GEN-LAST:event_form_Open
 
-    private void ExportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportButtonActionPerformed
+    private void exportButton_Click(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButton_Click
         try
         {
             JFileChooser dlg = new JFileChooser();
@@ -379,16 +379,16 @@ public class MainForm extends javax.swing.JFrame {
             if(dlg.showSaveDialog(null) != JFileChooser.APPROVE_OPTION)
                 return;
             String filename = dlg.getSelectedFile().getPath();
-            RoutineManager.Export(filename);
+            RoutineManager.exportData(filename);
             JOptionPane.showMessageDialog(null, "导出成功！");
         }
         catch(Exception ex)
         {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
-    }//GEN-LAST:event_ExportButtonActionPerformed
+    }//GEN-LAST:event_exportButton_Click
 
-    private void ImportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportButtonActionPerformed
+    private void importButton_Click(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importButton_Click
        try
        {
             JFileChooser dlg = new JFileChooser();
@@ -399,28 +399,28 @@ public class MainForm extends javax.swing.JFrame {
             boolean append = (JOptionPane.showConfirmDialog(null, "要删除之前的内容吗？",
                              "", JOptionPane.OK_CANCEL_OPTION)
                              == JOptionPane.CANCEL_OPTION);
-            RoutineManager.Import(filename, append);
-            RoutineForm.Clear();
+            RoutineManager.importData(filename, append);
+            routineForm.clear();
             JOptionPane.showMessageDialog(null, "导入成功！");
        }
        catch(Exception ex)
        {
            JOptionPane.showMessageDialog(null, ex.getMessage());
        }
-    }//GEN-LAST:event_ImportButtonActionPerformed
+    }//GEN-LAST:event_importButton_Click
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane CalendarScrollPane;
-    private javax.swing.JTable CalendarTable;
-    private javax.swing.JButton ExportButton;
-    private javax.swing.JButton ImportButton;
-    private javax.swing.JSpinner MonthSpinner;
-    private javax.swing.JLabel WeatherLabel;
-    private javax.swing.JSpinner YearSpinner;
+    private javax.swing.JScrollPane calendarScrollPane;
+    private javax.swing.JTable calendarTable;
+    private javax.swing.JButton exportButton;
+    private javax.swing.JButton importButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JSpinner monthSpinner;
+    private javax.swing.JLabel weatherLabel;
+    private javax.swing.JSpinner yearSpinner;
     // End of variables declaration//GEN-END:variables
 
-    private RoutineForm RoutineForm;
-    private TrayIcon TrayIcon;
+    private RoutineForm routineForm;
+    private TrayIcon trayIcon;
 }

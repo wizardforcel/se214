@@ -16,13 +16,13 @@ import android.util.Base64;
  */
 public class Base64Utility 
 {
-    public static String Base64Enco(String text) 
+    public static String base64Enco(String text)
            throws UnsupportedEncodingException
     {
         return Base64.encodeToString(text.getBytes("UTF-8"), Base64.DEFAULT);
         //return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
     }
-    public static String Base64Deco(String text) 
+    public static String base64Deco(String text)
            throws IOException
     {
         return new String(Base64.decode(text, Base64.DEFAULT), "UTF-8");

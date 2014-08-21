@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Routine.Utility;
+package routine.utility;
 
 import java.util.*;
 
@@ -17,16 +17,16 @@ public class CalendarManager
     public static final int WIDTH = 7;
     public static final int HEIGHT = 6;
     
-    private int[][] Table;
+    private int[][] table;
     
     public CalendarManager()
     {
-        Clear();
+        clear();
     }
     
-    private void Clear()
+    private void clear()
     {
-        Table = new int[][]
+        table = new int[][]
         {
             {0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0},
@@ -37,9 +37,9 @@ public class CalendarManager
         };
     }
     
-    public void SetDate(int year, int month)
+    public void setDate(int year, int month)
     {
-        Clear();
+        clear();
         Calendar dt = Calendar.getInstance();
         dt.set(year, month - 1, 1);
         int dayofweek = dt.get(Calendar.DAY_OF_WEEK);
@@ -49,13 +49,13 @@ public class CalendarManager
         {
             int row = offset / WIDTH,
                 col = offset % WIDTH;
-            Table[row][col] = i;
+            table[row][col] = i;
             offset++;
         }
     }
     
-    public int At(int row, int col)
+    public int at(int row, int col)
     {
-        return Table[row][col];
+        return table[row][col];
     }
 }

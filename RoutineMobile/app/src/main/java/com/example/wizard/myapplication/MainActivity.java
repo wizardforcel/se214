@@ -1,6 +1,5 @@
 package com.example.wizard.myapplication;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,8 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,69 +19,70 @@ import com.example.wizard.myapplication.utility.DatabaseHelper;
 
 public class MainActivity extends ActionBarActivity
 {
-    private GridView CalendarTable;
-    private Button SettingButton;
-    AlertDialog DateDialog;
-    private DatePicker DatePicker;
+    private GridView calendarTable;
+    private Button settingButton;
+    AlertDialog dateDialog;
+    private DatePicker datePicker;
 
-    private int Year;
-    private int Month;
+    private int year;
+    private int month;
 
-    private void InitViews()
+    private void initViews()
     {
-        CalendarTable = (GridView)findViewById(R.id.CalendarTable);
-        CalendarTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        calendarTable = (GridView)findViewById(R.id.calendarTable);
+        calendarTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-            { RoutineTable_OnItemClick(adapterView, view, i, l); }
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                routineTable_ItemClick(adapterView, view, i, l);
+            }
         });
 
-        SettingButton = (Button)findViewById(R.id.SettingButton);
-        SettingButton.setOnClickListener(new View.OnClickListener()
-        {
+        settingButton = (Button)findViewById(R.id.settingButton);
+        settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { SettingButton_OnClick(view); }
+            public void onClick(View view) {
+                settingButton_Click(view);
+            }
         });
 
-        DatePicker = new DatePicker(this);
-        DateDialog = new AlertDialog.Builder(this).setTitle("请输入日期")
-                .setView(DatePicker)
+        datePicker = new DatePicker(this);
+        dateDialog = new AlertDialog.Builder(this).setTitle("请输入日期")
+                .setView(datePicker)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
-                    { DateDialogOKButton_OnClick(dialogInterface, i); }
+                    { dateDialogOkButton_Click(dialogInterface, i); }
                 })
                 .setNegativeButton("取消", null).create();
     }
 
-    private void RoutineTable_OnItemClick(AdapterView<?> adapterView, View view, int i, long l)
+    private void routineTable_ItemClick(AdapterView<?> adapterView, View view, int i, long l)
     {
-        String daystr = (String)CalendarTable.getAdapter().getItem(i);
+        String daystr = (String) calendarTable.getAdapter().getItem(i);
         if(daystr.equals("")) return;
         int day = Integer.parseInt(daystr);
 
         Intent intent = new Intent();
         intent.setClass(this, RoutineActivity.class);
-        intent.putExtra("year", Year);
-        intent.putExtra("month", Month);
+        intent.putExtra("year", year);
+        intent.putExtra("month", month);
         intent.putExtra("day", day);
         this.startActivity(intent);
     }
 
-    private void DateDialogOKButton_OnClick(DialogInterface dialogInterface, int i)
+    private void dateDialogOkButton_Click(DialogInterface dialogInterface, int i)
     {
-        Year = DatePicker.getYear();
-        Month = DatePicker.getMonth() + 1;
-        ShowCalendar();
+        year = datePicker.getYear();
+        month = datePicker.getMonth() + 1;
+        showCalendar();
     }
 
 
-    private void SettingButton_OnClick(View view)
+    private void settingButton_Click(View view)
     {
-        DatePicker.init(Year, Month - 1, 1, null);
-        DateDialog.show();
+        datePicker.init(year, month - 1, 1, null);
+        dateDialog.show();
     }
 
     @Override
@@ -93,39 +91,39 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         this.setTitle("日程管理");
 
-        InitViews();
+        initViews();
 
         Calendar cal = Calendar.getInstance();
-        Year = cal.get(Calendar.YEAR);
-        Month = cal.get(Calendar.MONTH) + 1;
-        ShowCalendar();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH) + 1;
+        showCalendar();
 
         new Thread(new Runnable()
         {
             @Override
-            public void run() { DoNotice(); }
+            public void run() { doNotice(); }
         }).start();
     }
 
-    private void ShowCalendar()
+    private void showCalendar()
     {
         CalendarManager cm = new CalendarManager();
-        cm.SetDate(Year, Month);
+        cm.setDate(year, month);
         final int length = CalendarManager.HEIGHT * CalendarManager.WIDTH;
         String[] data = new String[length];
         for(int i = 0; i < length; i++)
         {
-            int tmp = cm.At(i / CalendarManager.WIDTH, i % CalendarManager.WIDTH);
+            int tmp = cm.at(i / CalendarManager.WIDTH, i % CalendarManager.WIDTH);
             if(tmp == 0)
                 data[i] = "";
             else
                 data[i] = String.valueOf(tmp);
         }
-        CalendarTable.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data));
-        SettingButton.setText(String.format("%d年%d月", Year, Month));
+        calendarTable.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data));
+        settingButton.setText(String.format("%d年%d月", year, month));
     }
 
-    private void DoNotice()
+    private void doNotice()
     {
         int lastmin = -1;
         SQLiteDatabase db;
@@ -166,7 +164,7 @@ public class MainActivity extends ActionBarActivity
                 while(cur.moveToNext())
                 {
                     String title = cur.getString(cur.getColumnIndex("title"));
-                    ShowNotify("日程管理", title + " 即将开始");
+                    showNotify("日程管理", title + " 即将开始");
                 }
                 System.out.println(String.format("%d %d %d", date, time, cur.getCount()));
                 cur.close();
@@ -179,7 +177,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    private void ShowNotify(String title, String content)
+    private void showNotify(String title, String content)
     {
         NotificationManager nm
                 = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -208,7 +206,7 @@ public class MainActivity extends ActionBarActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify at parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         return id == R.id.action_settings ||
                super.onOptionsItemSelected(item);

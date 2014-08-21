@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -19,153 +18,153 @@ import com.example.wizard.myapplication.utility.RoutineManager;
 
 public class SettingActivity extends ActionBarActivity {
 
-    private EditText TitleText;
-    private EditText ContentText;
-    private Button StartTimeButton;
-    private Button StopTimeButton;
-    private Button AlertTypeButton;
-    private Button AlertTimeButton;
-    private Button OKButton;
-    private Button CancelButton;
-    private AlertDialog StartTimeDialog;
-    private TimePicker StartTimePicker;
-    private AlertDialog StopTimeDialog;
-    private TimePicker StopTimePicker;
-    private AlertDialog AlertTypeDialog;
-    private AlertDialog AlertTimeDialog;
-    private TimePicker AlertTimePicker;
+    private EditText titleText;
+    private EditText contentText;
+    private Button startTimeButton;
+    private Button stopTimeButton;
+    private Button alertTypeButton;
+    private Button alertTimeButton;
+    private Button okButton;
+    private Button cancelButton;
+    private AlertDialog startTimeDialog;
+    private TimePicker startTimePicker;
+    private AlertDialog stopTimeDialog;
+    private TimePicker stopTimePicker;
+    private AlertDialog alertTypeDialog;
+    private AlertDialog alertTimeDialog;
+    private TimePicker alertTimePicker;
 
-    private RoutineManager Manager;
-    private NoteRow Row;
-    private int Index;
-    private boolean IsAdd;
+    private RoutineManager manager;
+    private NoteRow row;
+    private int index;
+    private boolean isAdd;
 
-    private int AlertType;
-    private int StartTimeHr;
-    private int StartTimeMin;
-    private int StopTimeHr;
-    private int StopTimeMin;
-    private int AlertTimeHr;
-    private int AlertTimeMin;
+    private int alertType;
+    private int startTimeHr;
+    private int startTimeMin;
+    private int stopTimeHr;
+    private int stopTimeMin;
+    private int alertTimeHr;
+    private int alertTimeMin;
 
-    private void InitViews()
+    private void initViews()
     {
-        TitleText = (EditText)findViewById(R.id.TitleText);
+        titleText = (EditText)findViewById(R.id.titleText);
 
-        ContentText = (EditText)findViewById(R.id.ContentText);
+        contentText = (EditText)findViewById(R.id.contentText);
 
-        OKButton = (Button)findViewById(R.id.OKButton);
-        OKButton.setOnClickListener(new View.OnClickListener()
-        {
+        okButton = (Button)findViewById(R.id.okButton);
+        okButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { OKButton_OnClick(view); }
+            public void onClick(View view) {
+                okButton_Click(view);
+            }
         });
 
-        CancelButton = (Button)findViewById(R.id.CancelButton);
-        CancelButton.setOnClickListener(new View.OnClickListener()
-        {
+        cancelButton = (Button)findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { CancelButton_OnClick(view); }
+            public void onClick(View view) {
+                cancelButton_Click(view);
+            }
         });
 
-        StartTimeButton = (Button)findViewById(R.id.StartTimeButton);
-        StartTimeButton.setOnClickListener(new View.OnClickListener()
-        {
+        startTimeButton = (Button)findViewById(R.id.startTimeButton);
+        startTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { StartTimeButton_OnClick(view); }
+            public void onClick(View view) {
+                startTimeButton_Click(view);
+            }
         });
 
-        StopTimeButton = (Button)findViewById(R.id.StopTimeButton);
-        StopTimeButton.setOnClickListener(new View.OnClickListener()
-        {
+        stopTimeButton = (Button)findViewById(R.id.stopTimeButton);
+        stopTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { StopTimeButton_OnClick(view); }
+            public void onClick(View view) {
+                stopTimeButton_Click(view);
+            }
         });
 
-        AlertTypeButton = (Button)findViewById(R.id.AlertTypeButton);
-        AlertTypeButton.setOnClickListener(new View.OnClickListener()
-        {
+        alertTypeButton = (Button)findViewById(R.id.alertTypeButton);
+        alertTypeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { AlertTypeButton_OnClick(view); }
+            public void onClick(View view) {
+                alertTypeButton_Click(view);
+            }
         });
 
-        AlertTimeButton = (Button)findViewById(R.id.AlertTimeButton);
-        AlertTimeButton.setOnClickListener(new View.OnClickListener()
-        {
+        alertTimeButton = (Button)findViewById(R.id.alertTimeButton);
+        alertTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { AlertTimeButton_OnClick(view); }
+            public void onClick(View view) {
+                alertTimeButton_Click(view);
+            }
         });
 
-        StartTimePicker = new TimePicker(this);
-        StartTimePicker.setIs24HourView(true);
-        StartTimePicker.setCurrentHour(0);
-        StartTimePicker.setCurrentMinute(0);
+        startTimePicker = new TimePicker(this);
+        startTimePicker.setIs24HourView(true);
+        startTimePicker.setCurrentHour(0);
+        startTimePicker.setCurrentMinute(0);
 
-        StartTimeDialog = new AlertDialog.Builder(this).setTitle("请输入开始时间")
-                .setView(StartTimePicker)
+        startTimeDialog = new AlertDialog.Builder(this).setTitle("请输入开始时间")
+                .setView(startTimePicker)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
-                    { StartTimeDialogOKButton_OnClick(); }
+                    { startTimeDialogOkButton_Click(); }
                 })
                 .setNegativeButton("取消", null)
                 .create();
 
-        StopTimePicker = new TimePicker(this);
-        StopTimePicker.setIs24HourView(true);
-        StopTimePicker.setCurrentHour(0);
-        StopTimePicker.setCurrentMinute(0);
+        stopTimePicker = new TimePicker(this);
+        stopTimePicker.setIs24HourView(true);
+        stopTimePicker.setCurrentHour(0);
+        stopTimePicker.setCurrentMinute(0);
 
-        StopTimeDialog = new AlertDialog.Builder(this).setTitle("请输入结束时间")
-                .setView(StopTimePicker)
+        stopTimeDialog = new AlertDialog.Builder(this).setTitle("请输入结束时间")
+                .setView(stopTimePicker)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
-                    { StopTimeDialogOKButton_OnClick(); }
+                    { stopTimeDialogOkButton_Click(); }
                 })
                 .setNegativeButton("取消", null)
                 .create();
 
-        AlertTimePicker = new TimePicker(this);
-        AlertTimePicker.setIs24HourView(true);
-        AlertTimePicker.setCurrentHour(0);
-        AlertTimePicker.setCurrentMinute(0);
+        alertTimePicker = new TimePicker(this);
+        alertTimePicker.setIs24HourView(true);
+        alertTimePicker.setCurrentHour(0);
+        alertTimePicker.setCurrentMinute(0);
 
-        AlertTimeDialog = new AlertDialog.Builder(this).setTitle("请输入提醒时间")
-                .setView(AlertTimePicker)
+        alertTimeDialog = new AlertDialog.Builder(this).setTitle("请输入提醒时间")
+                .setView(alertTimePicker)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
-                    { AlertTimeDialogOKButton_OnClick(); }
+                    { alertTimeDialogOkButton_Click(); }
                 })
                 .setNegativeButton("取消", null)
                 .create();
 
-        AlertTypeDialog = new AlertDialog.Builder(this).setTitle("请输入提醒方式")
-                .setSingleChoiceItems(new String[] {"无", "提前一天", "当天"}, AlertType,
+        alertTypeDialog = new AlertDialog.Builder(this).setTitle("请输入提醒方式")
+                .setSingleChoiceItems(new String[] {"无", "提前一天", "当天"}, alertType,
                 new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int which)
-                    { AlertTypeDialogOKButton_OnClick(dialog, which); }
+                    { alertTypeDialogOkButton_Click(dialog, which); }
                 })
                 .setNegativeButton("取消", null)
                 .create();
     }
 
-    private void OKButton_OnClick(View view)
+    private void okButton_Click(View view)
     {
         try
         {
-            String title = TitleText.getText().toString();
+            String title = titleText.getText().toString();
             if (title.equals("")) {
                 Toast.makeText(this, "事件名称为空！", Toast.LENGTH_SHORT).show();
                 return;
@@ -174,37 +173,37 @@ public class SettingActivity extends ActionBarActivity {
                 Toast.makeText(this, "事件名称不得大于32个字符！", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Row.SetTitle(title);
+            row.setTitle(title);
 
-            String content = ContentText.getText().toString();
+            String content = contentText.getText().toString();
             if (content.length() > 256) {
                 Toast.makeText(this, "备注不得大于256个字符！", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Row.SetComment(content);
+            row.setComment(content);
 
-            Row.SetAlertType(AlertType);
+            row.setAlertType(alertType);
 
-            int starttime = StartTimeHr * 100 + StartTimeMin;
-            int stoptime = StopTimeHr * 100 + StopTimeMin;
+            int starttime = startTimeHr * 100 + startTimeMin;
+            int stoptime = stopTimeHr * 100 + stopTimeMin;
             if (starttime > stoptime) {
                 Toast.makeText(this, "结束时间不得小于起始时间！", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Row.SetStartTime(starttime);
-            Row.SetEndTime(stoptime);
+            row.setStartTime(starttime);
+            row.setEndTime(stoptime);
 
-            int alerttime = AlertTimeHr * 100 + AlertTimeMin;
-            if (AlertType == 2 && starttime < alerttime) {
+            int alerttime = alertTimeHr * 100 + alertTimeMin;
+            if (alertType == 2 && starttime < alerttime) {
                 Toast.makeText(this, "结束时间不得小于起始时间！", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Row.SetAlertTime(alerttime);
+            row.setAlertTime(alerttime);
 
-            if (IsAdd)
-                Manager.Add(this, Row);
+            if (isAdd)
+                manager.add(this, row);
             else
-                Manager.UpdateAt(this, Index, Row);
+                manager.updateAt(this, index, row);
 
             this.finish();
         }
@@ -214,62 +213,62 @@ public class SettingActivity extends ActionBarActivity {
         }
     }
 
-    private void CancelButton_OnClick(View view)
+    private void cancelButton_Click(View view)
     {
         this.finish();
     }
 
-    private void StartTimeButton_OnClick(View view)
+    private void startTimeButton_Click(View view)
     {
-        StartTimePicker.setCurrentHour(StartTimeHr);
-        StartTimePicker.setCurrentMinute(StartTimeMin);
-        StartTimeDialog.show();
+        startTimePicker.setCurrentHour(startTimeHr);
+        startTimePicker.setCurrentMinute(startTimeMin);
+        startTimeDialog.show();
     }
 
-    private void StopTimeButton_OnClick(View view)
+    private void stopTimeButton_Click(View view)
     {
-        StopTimePicker.setCurrentHour(StopTimeHr);
-        StopTimePicker.setCurrentMinute(StopTimeMin);
-        StopTimeDialog.show();
+        stopTimePicker.setCurrentHour(stopTimeHr);
+        stopTimePicker.setCurrentMinute(stopTimeMin);
+        stopTimeDialog.show();
     }
 
-    private void AlertTypeButton_OnClick(View view)
+    private void alertTypeButton_Click(View view)
     {
-        AlertTypeDialog.show();
+        alertTypeDialog.show();
     }
 
-    private void AlertTimeButton_OnClick(View view)
+    private void alertTimeButton_Click(View view)
     {
-        AlertTimePicker.setCurrentHour(AlertTimeHr);
-        AlertTimePicker.setCurrentMinute(AlertTimeMin);
-        AlertTimeDialog.show();
+        alertTimePicker.setCurrentHour(alertTimeHr);
+        alertTimePicker.setCurrentMinute(alertTimeMin);
+        alertTimeDialog.show();
     }
 
-    private void StartTimeDialogOKButton_OnClick()
+    private void startTimeDialogOkButton_Click()
     {
-        StartTimeHr = StartTimePicker.getCurrentHour();
-        StartTimeMin = StartTimePicker.getCurrentMinute();
-        StartTimeButton.setText(String.format("%02d:%02d", StartTimeHr, StartTimeMin));
+        startTimeHr = startTimePicker.getCurrentHour();
+        startTimeMin = startTimePicker.getCurrentMinute();
+        startTimeButton.setText(String.format("%02d:%02d", startTimeHr, startTimeMin));
     }
 
-    private void StopTimeDialogOKButton_OnClick()
+    private void stopTimeDialogOkButton_Click()
     {
-        StopTimeHr = StopTimePicker.getCurrentHour();
-        StopTimeMin = StopTimePicker.getCurrentMinute();
-        StopTimeButton.setText(String.format("%02d:%02d", StopTimeHr, StopTimeMin));
+        stopTimeHr = stopTimePicker.getCurrentHour();
+        stopTimeMin = stopTimePicker.getCurrentMinute();
+        stopTimeButton.setText(String.format("%02d:%02d", stopTimeHr, stopTimeMin));
     }
 
-    private void AlertTimeDialogOKButton_OnClick()
+    private void alertTimeDialogOkButton_Click()
     {
-        AlertTimeHr = AlertTimePicker.getCurrentHour();
-        AlertTimeMin = AlertTimePicker.getCurrentMinute();
-        AlertTimeButton.setText(String.format("%02d:%02d", AlertTimeHr, AlertTimeMin));
+        alertTimeHr = alertTimePicker.getCurrentHour();
+        alertTimeMin = alertTimePicker.getCurrentMinute();
+        alertTimeButton.setText(String.format("%02d:%02d", alertTimeHr, alertTimeMin));
     }
 
-    private void AlertTypeDialogOKButton_OnClick(DialogInterface dialog, int which)
+    private void alertTypeDialogOkButton_Click(DialogInterface dialog, int which)
     {
-        AlertType = which;
-        AlertTypeButton.setText(new String[] {"无", "提前一天", "当天"}[which]);
+        alertType = which;
+        alertTypeButton.setText(new String[]{"无", "提前一天", "当天"}[which]);
         dialog.dismiss();
     }
 
@@ -278,30 +277,30 @@ public class SettingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        InitViews();
+        initViews();
 
         Intent intent = this.getIntent();
-        Manager = (RoutineManager) intent.getSerializableExtra("manager");
-        Row = (NoteRow) intent.getSerializableExtra("row");
-        Index = intent.getIntExtra("index", 0);
-        IsAdd = intent.getBooleanExtra("isadd", false);
+        manager = (RoutineManager) intent.getSerializableExtra("manager");
+        row = (NoteRow) intent.getSerializableExtra("row");
+        index = intent.getIntExtra("index", 0);
+        isAdd = intent.getBooleanExtra("isadd", false);
 
-        TitleText.setText(Row.GetTitle());
-        ContentText.setText(Row.GetComment());
-        int starttime = Row.GetStartTime();
-        StartTimeMin = starttime % 100;
-        StartTimeHr = starttime / 100;
-        StartTimeButton.setText(String.format("%02d:%02d", StartTimeHr, StartTimeMin));
-        int stoptime = Row.GetEndTime();
-        StopTimeMin = stoptime % 100;
-        StopTimeHr = stoptime / 100;
-        StopTimeButton.setText(String.format("%02d:%02d", StopTimeHr, StopTimeMin));
-        int alerttime = Row.GetAlertTime();
-        AlertTimeMin = alerttime % 100;
-        AlertTimeHr = alerttime / 100;
-        AlertTimeButton.setText(String.format("%02d:%02d", AlertTimeHr, AlertTimeMin));
-        AlertType = Row.GetAlertType();
-        AlertTypeButton.setText(new String[] {"无", "提前一天", "当天"}[AlertType]);
+        titleText.setText(row.getTitle());
+        contentText.setText(row.getComment());
+        int starttime = row.getStartTime();
+        startTimeMin = starttime % 100;
+        startTimeHr = starttime / 100;
+        startTimeButton.setText(String.format("%02d:%02d", startTimeHr, startTimeMin));
+        int stoptime = row.getEndTime();
+        stopTimeMin = stoptime % 100;
+        stopTimeHr = stoptime / 100;
+        stopTimeButton.setText(String.format("%02d:%02d", stopTimeHr, stopTimeMin));
+        int alerttime = row.getAlertTime();
+        alertTimeMin = alerttime % 100;
+        alertTimeHr = alerttime / 100;
+        alertTimeButton.setText(String.format("%02d:%02d", alertTimeHr, alertTimeMin));
+        alertType = row.getAlertType();
+        alertTypeButton.setText(new String[]{"无", "提前一天", "当天"}[alertType]);
     }
 
 
@@ -316,7 +315,7 @@ public class SettingActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify at parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;

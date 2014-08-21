@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-package Routine;
+package routine;
 
-import Routine.Utility.NoteRow;
-import Routine.Utility.RoutineManager;
+import routine.utility.NoteRow;
+import routine.utility.RoutineManager;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -27,40 +27,40 @@ public class RoutineForm extends javax.swing.JDialog
         initComponents();
         this.setLocationRelativeTo(null);
         this.setModal(true);
-        RoutineTable.getTableHeader().setReorderingAllowed(false);
-        RoutineTable.getTableHeader().setResizingAllowed(false);
-        SettingForm = new SettingForm();
+        routineTable.getTableHeader().setReorderingAllowed(false);
+        routineTable.getTableHeader().setResizingAllowed(false);
+        settingForm = new SettingForm();
     }
 
-    public void SetDate(int year, int month, int day)
+    public void setDate(int year, int month, int day)
            throws java.sql.SQLException, ClassNotFoundException
     {
-        if(Year == year && Month == month && Day == day)
+        if(this.year == year && this.month == month && this.day == day)
             return;
-        Year = year;
-        Month = month;
-        Day = day;
+        this.year = year;
+        this.month = month;
+        this.day = day;
         this.setTitle("日程安排 " + String.valueOf(year) + "年" +
                       String.valueOf(month) + "月" + String.valueOf(day) + "日");
-        Routine.Load(year, month, day);
-        ShowRoutine();
-        Year = year;
-        Month = month;
-        Day = day;
+        routine.load(year, month, day);
+        showRoutine();
+        this.year = year;
+        this.month = month;
+        this.day = day;
     }
     
-    private void ShowRoutine()
+    private void showRoutine()
     {
-        DefaultTableModel model = (DefaultTableModel)RoutineTable.getModel();
+        DefaultTableModel model = (DefaultTableModel)routineTable.getModel();
         model.setRowCount(0);
-        for(int i = 0; i < Routine.Size(); i++)
+        for(int i = 0; i < routine.size(); i++)
         {
-            NoteRow note = Routine.Get(i);
+            NoteRow note = routine.get(i);
             Object[] arr = new Object[6];
-            arr[0] = note.GetTitle();
-            arr[1] = RoutineManager.TimeConvert(note.GetStartTime());
-            arr[2] = RoutineManager.TimeConvert(note.GetEndTime());
-            int itype = note.GetAlertType();
+            arr[0] = note.getTitle();
+            arr[1] = RoutineManager.timeConvert(note.getStartTime());
+            arr[2] = RoutineManager.timeConvert(note.getEndTime());
+            int itype = note.getAlertType();
             String strtype;
             if(itype == 1)
                 strtype = "提前一天";
@@ -69,16 +69,16 @@ public class RoutineForm extends javax.swing.JDialog
             else
                 strtype = "无";
             arr[3] = strtype;
-            arr[4] = RoutineManager.TimeConvert(note.GetAlertTime());
-            arr[5] = note.GetComment();
+            arr[4] = RoutineManager.timeConvert(note.getAlertTime());
+            arr[5] = note.getComment();
             model.addRow(arr);
         }
     }
     
-    public void Clear()
+    public void clear()
     {
-        Year = Month = Day = 0;
-        this.Routine.Clear();
+        year = month = day = 0;
+        this.routine.clear();
     }
     
     /**
@@ -90,14 +90,14 @@ public class RoutineForm extends javax.swing.JDialog
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        RoutineTable = new javax.swing.JTable();
-        DelButton = new javax.swing.JButton();
-        AddButton = new javax.swing.JButton();
+        routineScrollPane = new javax.swing.JScrollPane();
+        routineTable = new javax.swing.JTable();
+        delButton = new javax.swing.JButton();
+        addButton = new javax.swing.JButton();
 
         setResizable(false);
 
-        RoutineTable.setModel(new javax.swing.table.DefaultTableModel(
+        routineTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -113,24 +113,24 @@ public class RoutineForm extends javax.swing.JDialog
                 return canEdit [columnIndex];
             }
         });
-        RoutineTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        routineTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                RoutineTableMouseClicked(evt);
+                routineTable_Click(evt);
             }
         });
-        jScrollPane1.setViewportView(RoutineTable);
+        routineScrollPane.setViewportView(routineTable);
 
-        DelButton.setText("删除");
-        DelButton.addActionListener(new java.awt.event.ActionListener() {
+        delButton.setText("删除");
+        delButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DelButtonActionPerformed(evt);
+                delButton_Click(evt);
             }
         });
 
-        AddButton.setText("添加");
-        AddButton.addActionListener(new java.awt.event.ActionListener() {
+        addButton.setText("添加");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddButtonActionPerformed(evt);
+                addButton_Click(evt);
             }
         });
 
@@ -141,98 +141,98 @@ public class RoutineForm extends javax.swing.JDialog
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                    .addComponent(routineScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(delButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(routineScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DelButton)
-                    .addComponent(AddButton))
+                    .addComponent(delButton)
+                    .addComponent(addButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void RoutineTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RoutineTableMouseClicked
+    private void routineTable_Click(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_routineTable_Click
         try
         {
             if(evt.getClickCount() == 1) return;
-            int row = RoutineTable.getSelectedRow();
-            NoteRow note = Routine.Get(row).Clone();
-            SettingForm.SetNote(note);
-            SettingForm.setVisible(true);
-            if(SettingForm.IsSaved())
+            int row = routineTable.getSelectedRow();
+            NoteRow note = routine.get(row).clone();
+            settingForm.setNote(note);
+            settingForm.setVisible(true);
+            if(settingForm.isSaved())
             {
-                Routine.UpdateAt(row, note);
-                ShowRoutine();
+                routine.updateAt(row, note);
+                showRoutine();
             }
         }
         catch(Exception ex)
         {
             JOptionPane.showMessageDialog(null, "修改失败！" + ex.getMessage());
         }
-    }//GEN-LAST:event_RoutineTableMouseClicked
+    }//GEN-LAST:event_routineTable_Click
 
-    private void DelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DelButtonActionPerformed
+    private void delButton_Click(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delButton_Click
         try
         {
-            int row = RoutineTable.getSelectedRow();
+            int row = routineTable.getSelectedRow();
             if(row == -1) return;
             if(JOptionPane.showConfirmDialog(null, "真的要删除吗？",
                 UIManager.getString("OptionPane.titleText") , 
                 JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
                 return;
-            Routine.RemoveAt(row);
-            ShowRoutine();
+            routine.removeAt(row);
+            showRoutine();
         }
         catch(Exception ex)
         {
             JOptionPane.showMessageDialog(null, "删除失败！" + ex.getMessage());
         }
-    }//GEN-LAST:event_DelButtonActionPerformed
+    }//GEN-LAST:event_delButton_Click
 
-    private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
+    private void addButton_Click(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton_Click
         try
         {
             NoteRow note = new NoteRow();
-            note.SetDate(Year * 10000 + Month * 100 + Day);
-            SettingForm.SetNote(note);
-            SettingForm.setVisible(true);
-            if(SettingForm.IsSaved())
+            note.setDate(year * 10000 + month * 100 + day);
+            settingForm.setNote(note);
+            settingForm.setVisible(true);
+            if(settingForm.isSaved())
             {
-                Routine.Add(note);
-                ShowRoutine();
+                routine.add(note);
+                showRoutine();
             }
         }
         catch(Exception ex)
         {
             JOptionPane.showMessageDialog(null, "添加失败！" + ex.getMessage());
         }
-    }//GEN-LAST:event_AddButtonActionPerformed
+    }//GEN-LAST:event_addButton_Click
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AddButton;
-    private javax.swing.JButton DelButton;
-    private javax.swing.JTable RoutineTable;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton delButton;
+    private javax.swing.JScrollPane routineScrollPane;
+    private javax.swing.JTable routineTable;
     // End of variables declaration//GEN-END:variables
 
-    private int Year;
-    private int Month;
-    private int Day;
-    private RoutineManager Routine
+    private int year;
+    private int month;
+    private int day;
+    private RoutineManager routine
             = new RoutineManager();
-    private SettingForm SettingForm;
+    private SettingForm settingForm;
 }

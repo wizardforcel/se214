@@ -18,106 +18,104 @@ import java.util.Calendar;
 
 public class RoutineActivity extends ActionBarActivity {
 
-    private int Year;
-    private int Month;
-    private int Day;
-    private RoutineManager Manager
+    private int year;
+    private int month;
+    private int day;
+    private RoutineManager manager
       = new RoutineManager();
-    private int RemoveIndex;
+    private int removeIndex;
 
-    private ListView RoutineTable;
-    private Button AddButton;
+    private ListView routineTable;
+    private Button addButton;
 
-    private void InitViews()
+    private void initViews()
     {
-        RoutineTable = (ListView)findViewById(R.id.RoutineTable);
-        RoutineTable.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        routineTable = (ListView)findViewById(R.id.routineTable);
+        routineTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-            { RoutineTable_OnItemClick(adapterView, view, i, l); }
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                routineTable_ItemClick(adapterView, view, i, l);
+            }
         });
-        RoutineTable.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
+        routineTable.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
-            {
-                RoutineTable_OnItemLongClick(adapterView, view, i, l);
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                routineTable_ItemLongClick(adapterView, view, i, l);
                 return true;
             }
         });
 
-        AddButton = (Button)findViewById(R.id.AddButton);
-        AddButton.setOnClickListener(new View.OnClickListener()
-        {
+        addButton = (Button)findViewById(R.id.addButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            { AddButton_OnClick(view); }
+            public void onClick(View view) {
+                addButton_Click(view);
+            }
         });
     }
 
-    private void ShowRoutine()
+    private void showRoutine()
     {
-        Manager.Load(this, Year, Month, Day);
+        manager.load(this, year, month, day);
         ArrayList<String> titles
           = new ArrayList<String>();
-        for(int i = 0; i < Manager.Size(); i++)
+        for(int i = 0; i < manager.size(); i++)
         {
-            NoteRow note = Manager.Get(i);
-            titles.add(note.GetTitle());
+            NoteRow note = manager.get(i);
+            titles.add(note.getTitle());
         }
-        RoutineTable.setAdapter(new ArrayAdapter<String>(this,
+        routineTable.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, titles));
 
     }
 
-    private void AddButton_OnClick(View view)
+    private void addButton_Click(View view)
     {
         Intent intent = new Intent();
         intent.setClass(this, SettingActivity.class);
         intent.putExtra("isadd", true);
         NoteRow note = new NoteRow();
-        note.SetDate(Year * 10000 + Month * 100 + Day);
+        note.setDate(year * 10000 + month * 100 + day);
         intent.putExtra("row", note);
-        intent.putExtra("manager", Manager);
+        intent.putExtra("manager", manager);
         this.startActivity(intent);
     }
 
     //短按修改
-    private void RoutineTable_OnItemClick(AdapterView<?> adapterView, View view, int i, long l)
+    private void routineTable_ItemClick(AdapterView<?> adapterView, View view, int i, long l)
     {
         Intent intent = new Intent();
         intent.setClass(this, SettingActivity.class);
         intent.putExtra("isadd", false);
         intent.putExtra("index", i);
-        NoteRow note = Manager.Get(i);
+        NoteRow note = manager.get(i);
         intent.putExtra("row", note);
-        intent.putExtra("manager", Manager);
+        intent.putExtra("manager", manager);
         this.startActivity(intent);
     }
 
     //长按删除
-    private void RoutineTable_OnItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
+    private void routineTable_ItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
     {
-            RemoveIndex = i;
+            removeIndex = i;
             new AlertDialog.Builder(this)
                     .setTitle("确实要删除吗？")
                     .setPositiveButton("是", new DialogInterface.OnClickListener()
                     {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i)
-                        { DeleteDialogOKButton_OnClick(dialogInterface, i); }
+                        { deleteDialogOkButton_Click(dialogInterface, i); }
                     })
                     .setNegativeButton("否", null)
                     .show();
     }
 
-    private void DeleteDialogOKButton_OnClick(DialogInterface dialogInterface, int i)
+    private void deleteDialogOkButton_Click(DialogInterface dialogInterface, int i)
     {
         try
         {
-            Manager.RemoveAt(this, RemoveIndex);
-            ShowRoutine();
+            manager.removeAt(this, removeIndex);
+            showRoutine();
         }
         catch(Exception ex)
         {
@@ -132,23 +130,23 @@ public class RoutineActivity extends ActionBarActivity {
 
         Calendar cal = Calendar.getInstance();
         Intent intent = this.getIntent();
-        Year = intent.getIntExtra("year", cal.get(Calendar.YEAR));
-        Month = intent.getIntExtra("month", cal.get(Calendar.MONTH) + 1);
-        Day = intent.getIntExtra("day", cal.get(Calendar.DATE));
-        this.setTitle(String.format("%d年%d月%d日", Year, Month, Day));
+        year = intent.getIntExtra("year", cal.get(Calendar.YEAR));
+        month = intent.getIntExtra("month", cal.get(Calendar.MONTH) + 1);
+        day = intent.getIntExtra("day", cal.get(Calendar.DATE));
+        this.setTitle(String.format("%d年%d月%d日", year, month, day));
 
-        InitViews();
+        initViews();
 
-        ShowRoutine();
+        showRoutine();
     }
 
     @Override
     protected void onRestart()
     {
         super.onRestart();
-        Manager.Clear();
-        Manager.Load(this, Year, Month, Day);
-        ShowRoutine();
+        manager.clear();
+        manager.load(this, year, month, day);
+        showRoutine();
     }
 
     @Override
@@ -162,7 +160,7 @@ public class RoutineActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify at parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;

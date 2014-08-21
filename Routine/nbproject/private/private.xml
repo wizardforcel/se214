@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/编程技术/se214/Routine/src/Routine/MainForm.java</file>
+            <file>file:/D:/编程技术/se214/Routine/src/routine/SettingForm.java</file>
+            <file>file:/D:/编程技术/se214/Routine/src/routine/utility/RoutineManager.java</file>
+            <file>file:/D:/编程技术/se214/Routine/src/routine/utility/StreamWriter.java</file>
+            <file>file:/D:/编程技术/se214/Routine/src/routine/utility/NoteRow.java</file>
         </group>
     </open-files>
 </project-private>
