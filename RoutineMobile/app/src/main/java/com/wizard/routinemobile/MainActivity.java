@@ -1,4 +1,4 @@
-package com.example.wizard.myapplication;
+package com.wizard.routinemobile;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +14,9 @@ import android.app.*;
 import android.widget.*;
 import java.lang.*;
 import java.util.Calendar;
-import com.example.wizard.myapplication.utility.CalendarManager;
-import com.example.wizard.myapplication.utility.DatabaseHelper;
+
+import com.wizard.routinemobile.utility.CalendarManager;
+import com.wizard.routinemobile.utility.DatabaseHelper;
 
 public class MainActivity extends ActionBarActivity
 {

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.example.wizard.myapplication.utility;
+package com.wizard.routinemobile.utility;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

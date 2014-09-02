@@ -1,4 +1,4 @@
-package com.example.wizard.myapplication;
+package com.wizard.routinemobile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,8 +13,8 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.wizard.myapplication.utility.NoteRow;
-import com.example.wizard.myapplication.utility.RoutineManager;
+import com.wizard.routinemobile.utility.NoteRow;
+import com.wizard.routinemobile.utility.RoutineManager;
 
 public class SettingActivity extends ActionBarActivity {
 

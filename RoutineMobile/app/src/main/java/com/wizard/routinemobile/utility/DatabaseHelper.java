@@ -1,4 +1,4 @@
-package com.example.wizard.myapplication.utility;
+package com.wizard.routinemobile.utility;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
