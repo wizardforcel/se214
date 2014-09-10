@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package routine.baiduapi;
+package com.wizard.routinemobile.baiduapi;
 
-import routine.utility.WizardHTTP;
+import com.wizard.routinemobile.utility.WizardHTTP;
 import java.net.*;
 import java.io.*;
 import org.json.*;
@@ -20,7 +20,7 @@ public class BaiduAPI
     public static final String API_KEY = "D76279e349e952599c0ee9f283a85a57";
     
     public static LocResult getLoc(WizardHTTP wc, String ip)
-           throws IOException, JSONException
+            throws IOException, JSONException
     {
         String retstr = wc.httpGet("http://api.map.baidu.com/location/ip" + 
                                    "?ak=" + BaiduAPI.API_KEY + "&ip=" + ip);
@@ -33,8 +33,7 @@ public class BaiduAPI
     }
     
     public static WeatherResult getWeater(WizardHTTP wc, String city)
-           throws IOException, JSONException
-    {
+            throws IOException, JSONException {
         wc.setCharset("utf-8");
         String retstr = wc.httpGet("http://api.map.baidu.com/telematics/v3/weather" + 
                                    "?location=" + URLEncoder.encode(city, "utf-8") + 

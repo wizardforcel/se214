@@ -33,8 +33,10 @@ public class MainForm extends javax.swing.JFrame {
     {
         initComponents();
         this.setLocationRelativeTo(null);
+        
         calendarTable.getTableHeader().setReorderingAllowed(false);
         calendarTable.getTableHeader().setResizingAllowed(false);
+        
         routineForm = new RoutineForm();
         
         initTrayIcon();
@@ -166,7 +168,7 @@ public class MainForm extends javax.swing.JFrame {
         }
         catch(Exception ex)
         {
-            this.weatherLabel.setText("天气获取失败！" + ex.getMessage());
+            this.weatherLabel.setText("天气获取失败！");
         }
     }
     

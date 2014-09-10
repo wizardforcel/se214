@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +17,12 @@ import android.app.*;
 import android.widget.*;
 import java.lang.*;
 import java.util.Calendar;
-
+import com.wizard.routinemobile.baiduapi.BaiduAPI;
+import com.wizard.routinemobile.baiduapi.LocResult;
+import com.wizard.routinemobile.baiduapi.WeatherResult;
 import com.wizard.routinemobile.utility.CalendarManager;
 import com.wizard.routinemobile.utility.DatabaseHelper;
+import com.wizard.routinemobile.utility.WizardHTTP;
 
 public class MainActivity extends ActionBarActivity
 {
@@ -24,9 +30,11 @@ public class MainActivity extends ActionBarActivity
     private Button settingButton;
     AlertDialog dateDialog;
     private DatePicker datePicker;
+    private TextView weatherLabel;
 
     private int year;
     private int month;
+    private String weather = "";
 
     private void initViews()
     {
@@ -56,6 +64,8 @@ public class MainActivity extends ActionBarActivity
                     { dateDialogOkButton_Click(dialogInterface, i); }
                 })
                 .setNegativeButton("取消", null).create();
+
+        weatherLabel = (TextView)findViewById(R.id.weatherText);
     }
 
     private void routineTable_ItemClick(AdapterView<?> adapterView, View view, int i, long l)
@@ -99,10 +109,16 @@ public class MainActivity extends ActionBarActivity
         month = cal.get(Calendar.MONTH) + 1;
         showCalendar();
 
-        new Thread(new Runnable()
+        /*new Thread(new Runnable()
         {
             @Override
             public void run() { doNotice(); }
+        }).start();*/
+
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run() { getWeather(); }
         }).start();
     }
 
@@ -193,6 +209,58 @@ public class MainActivity extends ActionBarActivity
         noti.setLatestEventInfo(context, title, content, cointent);
 
         nm.notify(0, noti);
+    }
+
+    public void showWeather()
+    {
+        weatherLabel.setText(weather);
+        //System.out.println("blablabla");
+        //this.settingButton.setText(weather);
+    }
+
+    private void getWeather()
+    {
+        try
+        {
+            Looper.prepare();
+            WizardHTTP wc = new WizardHTTP();
+            wc.setDefHeader(false);
+            LocResult lr = BaiduAPI.getLoc(wc, "");
+            if(lr.errno != 0)
+                throw new Exception(lr.errmsg);
+            String city = lr.city;
+            WeatherResult wr = BaiduAPI.getWeater(wc, city);
+            if(wr.errno != 0)
+                throw new Exception(wr.errmsg);
+            String weather = wr.weather;
+            String wind = wr.wind;
+            String temperature = wr.temprature;
+            this.weather = city + " " + temperature + " " +
+                         weather + " " + wind;
+            //System.out.println(this.weather);
+            Handler hdl = new Handler(){
+                @Override
+                public void handleMessage(Message msg)
+                {
+                    showWeather();
+                    super.handleMessage(msg);
+                }
+            };
+            hdl.sendMessage(new Message());
+        }
+        catch(Exception ex)
+        {
+            this.weather = "天气获取失败！" + ex.getMessage();
+            Handler hdl = new Handler(){
+                @Override
+                public void handleMessage(Message msg)
+                {
+                    showWeather();
+                    super.handleMessage(msg);
+                }
+            };
+            hdl.sendMessage(new Message());
+        }
     }
 
     @Override
