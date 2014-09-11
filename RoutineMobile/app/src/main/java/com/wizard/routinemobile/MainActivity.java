@@ -31,10 +31,13 @@ public class MainActivity extends ActionBarActivity
     AlertDialog dateDialog;
     private DatePicker datePicker;
     private TextView weatherLabel;
+    private Handler handler;
 
     private int year;
     private int month;
-    private String weather = "";
+
+    private static final int SHOW_WEATHER = 0x101;
+    private static final int SHOW_TOAST = 0x102;
 
     private void initViews()
     {
@@ -109,11 +112,30 @@ public class MainActivity extends ActionBarActivity
         month = cal.get(Calendar.MONTH) + 1;
         showCalendar();
 
-        /*new Thread(new Runnable()
+        handler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg)
+            {
+                if(msg.what == SHOW_WEATHER)
+                {
+                    String co = msg.getData().getString("content");
+                    weatherLabel.setText(co);
+                }
+                else if(msg.what == SHOW_TOAST)
+                {
+                    String co = msg.getData().getString("content");
+                    Toast.makeText(MainActivity.this, co, Toast.LENGTH_SHORT).show();
+                }
+                super.handleMessage(msg);
+            }
+        };
+
+        new Thread(new Runnable()
         {
             @Override
             public void run() { doNotice(); }
-        }).start();*/
+        }).start();
 
         new Thread(new Runnable()
         {
@@ -150,7 +172,12 @@ public class MainActivity extends ActionBarActivity
         }
         catch(Exception ex)
         {
-            //Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Message msg = new Message();
+            Bundle bd = new Bundle();
+            bd.putString("content", ex.getMessage());
+            msg.setData(bd);
+            msg.what = SHOW_TOAST;
+            handler.sendMessage(msg);
             return;
         }
         String sql = "SELECT title FROM note " +
@@ -189,7 +216,12 @@ public class MainActivity extends ActionBarActivity
             }
             catch(Exception ex)
             {
-                //Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                Message msg = new Message();
+                Bundle bd = new Bundle();
+                bd.putString("content", ex.getMessage());
+                msg.setData(bd);
+                msg.what = SHOW_TOAST;
+                handler.sendMessage(msg);
             }
         }
     }
@@ -211,18 +243,10 @@ public class MainActivity extends ActionBarActivity
         nm.notify(0, noti);
     }
 
-    public void showWeather()
-    {
-        weatherLabel.setText(weather);
-        //System.out.println("blablabla");
-        //this.settingButton.setText(weather);
-    }
-
     private void getWeather()
     {
         try
         {
-            Looper.prepare();
             WizardHTTP wc = new WizardHTTP();
             wc.setDefHeader(false);
             LocResult lr = BaiduAPI.getLoc(wc, "");
@@ -235,31 +259,23 @@ public class MainActivity extends ActionBarActivity
             String weather = wr.weather;
             String wind = wr.wind;
             String temperature = wr.temprature;
-            this.weather = city + " " + temperature + " " +
+            String co = city + " " + temperature + " " +
                          weather + " " + wind;
-            //System.out.println(this.weather);
-            Handler hdl = new Handler(){
-                @Override
-                public void handleMessage(Message msg)
-                {
-                    showWeather();
-                    super.handleMessage(msg);
-                }
-            };
-            hdl.sendMessage(new Message());
+            Message msg = new Message();
+            Bundle bd = new Bundle();
+            bd.putString("content", co);
+            msg.setData(bd);
+            msg.what = SHOW_WEATHER;
+            handler.sendMessage(msg);
         }
         catch(Exception ex)
         {
-            this.weather = "天气获取失败！" + ex.getMessage();
-            Handler hdl = new Handler(){
-                @Override
-                public void handleMessage(Message msg)
-                {
-                    showWeather();
-                    super.handleMessage(msg);
-                }
-            };
-            hdl.sendMessage(new Message());
+            Message msg = new Message();
+            Bundle bd = new Bundle();
+            bd.putString("content", "天气获取失败！");
+            msg.setData(bd);
+            msg.what = SHOW_WEATHER;
+            handler.sendMessage(msg);
         }
     }
 
